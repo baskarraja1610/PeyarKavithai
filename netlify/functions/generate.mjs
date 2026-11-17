@@ -1,3 +1,4 @@
+
 export default async (request) => {
   const headers = {
     "Content-Type": "application/json",
@@ -10,7 +11,10 @@ export default async (request) => {
 
   if (request.method !== "POST") {
     return new Response(
-      JSON.stringify({ success: false, error: "Method not allowed" }),
+      JSON.stringify({
+        success: false,
+        error: "Method not allowed"
+      }),
       { status: 405, headers }
     );
   }
@@ -20,7 +24,10 @@ export default async (request) => {
 
     if (!prompt || typeof prompt !== "string") {
       return new Response(
-        JSON.stringify({ success: false, error: "Prompt missing" }),
+        JSON.stringify({
+          success: false,
+          error: "Prompt missing"
+        }),
         { status: 400, headers }
       );
     }
@@ -32,8 +39,9 @@ export default async (request) => {
     }
 
     const model = "gemini-3.8-flash";
-const startTime = Date.now();
-console.log("Gemini request started");
+
+    console.log("Gemini request started");
+
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
       {
@@ -41,6 +49,7 @@ console.log("Gemini request started");
         headers: {
           "Content-Type": "application/json"
         },
+        signal: AbortSignal.timeout(20000),
         body: JSON.stringify({
           contents: [
             {
@@ -53,10 +62,12 @@ console.log("Gemini request started");
           }
         })
       }
-    );f
+    );
+
+    console.log("Gemini HTTP status:", response.status);
 
     const result = await response.json();
-console.log("Gemini response time:", Date.now() - startTime, "ms");
+
     if (!response.ok) {
       throw new Error(
         result.error?.message || "Gemini generation failed"
@@ -93,11 +104,13 @@ console.log("Gemini response time:", Date.now() - startTime, "ms");
 
   } catch (error) {
     console.error("Gemini Error:", error);
-    
+
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message || "Something went wrong"
+        error: error.name === "TimeoutError"
+          ? "Gemini request timed out. Please try again."
+          : error.message || "Something went wrong"
       }),
       { status: 500, headers }
     );
