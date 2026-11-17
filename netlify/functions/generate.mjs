@@ -38,7 +38,7 @@ export default async (request) => {
       throw new Error("Gemini API key is not configured");
     }
 
-    const model = "gemini-3.1-pro";
+    const model = "gemini-3.5-flash-lite";
 
     console.log("Gemini request started");
 
