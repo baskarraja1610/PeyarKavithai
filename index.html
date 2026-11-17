@@ -225,7 +225,9 @@ h1{background:linear-gradient(90deg,#7a5bc2,#d27bb5);-webkit-background-clip:tex
   }
   async function makePoem(name,L,lang,style,avoid){
     var res=await fetch("/.netlify/functions/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:promptFor(name,L,lang,style,avoid)})});
-    var data=await res.json();
+    var raw=await res.text();
+console.log("SERVER RESPONSE:",res.status,raw);
+var data=JSON.parse(raw);
     if(!res.ok)throw new Error(data.error||"கவிதை உருவாக்க முடியவில்லை.");
     var poem={mode:"embedded",lines:data.lines||[],lang:lang};
     if(!checkPoem(poem,L))throw new Error("பெயரின் எழுத்து வரிசைக்கு ஏற்ற கவிதை கிடைக்கவில்லை. மீண்டும் முயற்சிக்கவும்.");
