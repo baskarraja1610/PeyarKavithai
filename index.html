@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>பெயர் கவிதை – உங்கள் பெயரில் ஒரு கவிதை</title>
+<link href="https://fonts.googleapis.com/css2?family=Kavivanar&family=Karla+Tamil+Inclined:wght@400;700&family=Meera+Inimai&family=Anek+Tamil:wght@500&family=Arima:wght@500&family=Tiro+Tamil&family=Hind+Madurai:wght@500&family=Baloo+Thambi+2:wght@600&family=Noto+Serif+Tamil:wght@500;700&family=Noto+Sans+Tamil:wght@400;600&family=Great+Vibes&family=Allura&family=Parisienne&family=Sacramento&family=Dancing+Script:wght@600&family=Satisfy&family=Caveat:wght@600&family=Homemade+Apple&family=DM+Serif+Display&family=Fraunces:wght@500&family=Syne:wght@500&family=Pacifico&family=Playfair+Display:wght@500;600&family=Noto+Serif+Tamil:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Catamaran:wght@400;500;600&family=Kalam:wght@400;700&family=Hind+Madurai:wght@400;500;600&family=Mukta+Malar:wght@400;500;600&family=Baloo+Thambi+2:wght@400;500;600;700&family=Arima:wght@400;500;600&family=Anek+Tamil:wght@400;500;600&family=Meera+Inimai&family=Tiro+Tamil&family=Kavivanar&family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Lora:wght@400;500;600;700&family=Merriweather:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Cinzel:wght@400;500;600;700&family=Fraunces:wght@400;500;600&family=Playfair+Display:wght@400;500;600;700&family=Great+Vibes&family=Allura&family=Parisienne&family=Sacramento&family=Dancing+Script:wght@400;600;700&family=Satisfy&family=Caveat:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f2ea;--card:#fffdf9;--ink:#1f1a17;--muted:#7b6f64;--gold:#9a7436;--line:#e6dccb;--wine:#7a1f3d;--on:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15110f;--card:#1f1915;--ink:#f1e8da;--muted:#a99a88;--gold:#d4b176;--line:#3a2f27;--wine:#c2410c;--on:#15110f}}
+:root[data-theme="dark"]{--bg:#15110f;--card:#1f1915;--ink:#f1e8da;--muted:#a99a88;--gold:#d4b176;--line:#3a2f27;--wine:#c2410c;--on:#15110f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Tamil",system-ui,sans-serif;line-height:1.7;overflow-x:hidden}
+main{max-width:560px;margin:0 auto;padding:30px 18px 60px}
+h1,h2{font-family:"Cormorant Garamond","Noto Serif Tamil",Georgia,serif;font-weight:600;line-height:1.3}
+h1{font-size:2.1rem;margin:6px 0 6px;letter-spacing:.01em}
+h2{font-size:1.3rem;margin:0 0 10px}
+.eyebrow{color:var(--gold);letter-spacing:.28em;font-size:.72rem;font-weight:600}
+.sub{color:var(--muted);margin:0 0 26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:18px}
+.step{display:none}
+label{display:block;font-weight:600;margin:0 0 6px;font-size:.92rem}
+input[type=text]{width:100%;padding:13px 14px;font:inherit;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)}
+.err{animation:shake .4s;border-color:var(--wine)!important}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.opt{padding:8px 14px;border:1px solid var(--line);border-radius:99px;background:var(--bg);color:var(--ink);font:inherit;font-size:.9rem;cursor:pointer}
+.opt.on{background:var(--gold);border-color:var(--gold);color:var(--on);font-weight:600}
+#rose{position:relative;width:100%;border:0;border-radius:20px;padding:24px 16px;color:#fff;cursor:pointer;font:inherit;text-align:center;
+background:radial-gradient(circle at 30% 20%,#b4325a,#7a1f3d 60%,#4a1226);box-shadow:0 12px 30px rgba(122,31,61,.35);transition:transform .15s}
+#rose:active{transform:scale(.97)}
+#rose .amt{display:block;font-family:"Cormorant Garamond",serif;font-weight:600;font-size:3rem;line-height:1.1}
+#rose .ily{display:block;letter-spacing:.2em;font-size:.8rem;margin-top:4px;color:#f3d9a8}
+#rose small{display:block;opacity:.85;margin-top:8px;font-size:.78rem}
+.petal{position:fixed;width:14px;height:18px;border-radius:150% 0 150% 0;background:radial-gradient(circle at 30% 30%,#fecdd3,#e11d48);pointer-events:none;z-index:50;animation:fly 2.4s ease-out forwards}
+@keyframes fly{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r))}}
+.btn{width:100%;margin-top:14px;padding:14px;font:inherit;font-weight:600;border:0;border-radius:12px;background:var(--gold);color:var(--on);cursor:pointer}
+.btn:disabled{opacity:.5}
+.note{color:var(--muted);font-size:.84rem;margin:10px 0 0}
+.note a{color:var(--gold)}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden;margin:6px 0 4px}
+.bar i{display:block;height:100%;width:0;background:var(--gold)}
+.poem{border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:12px;cursor:pointer;font-family:"Noto Serif Tamil",Georgia,serif;background:var(--bg);opacity:0;animation:in .8s forwards}
+.poem.sel{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.poem div{padding:3px 0}
+.poem em,.poem u{font-style:normal;text-decoration:none;color:var(--gold);font-weight:700}
+.poem small{display:block;color:var(--muted);font-family:"Noto Sans Tamil",sans-serif;font-size:.75rem;margin-bottom:4px}
+@keyframes in{to{opacity:1}}
+canvas{width:100%;border-radius:14px;border:1px solid var(--line);margin-top:10px;background:var(--bg)}
+input[type=file]{width:100%;margin:6px 0 12px;font:inherit;font-size:.9rem}
+body{background:radial-gradient(900px 500px at 85% -5%,rgba(194,65,12,.13),transparent 60%),radial-gradient(700px 500px at -10% 45%,rgba(154,116,54,.15),transparent 60%),var(--bg)}
+main{position:relative;z-index:1}
+h1,h2{font-family:"Playfair Display","Tiro Tamil",serif}
+h1{font-size:2.2rem;background:linear-gradient(90deg,var(--gold),#c2410c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card{box-shadow:0 12px 32px rgba(90,45,10,.09)}
+.btn{background:linear-gradient(135deg,var(--gold),#c2410c)}
+.leaves{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+.leaf{position:absolute;top:-40px;background-size:contain;background-repeat:no-repeat;opacity:.38;animation:fall linear infinite}
+@keyframes fall{0%{transform:translate(0,-6vh) rotate(0)}50%{transform:translate(calc(var(--sx)/2),55vh) rotate(calc(var(--r)/2))}100%{transform:translate(var(--sx),112vh) rotate(var(--r))}}
+@media (prefers-reduced-motion:reduce){.leaves{display:none}}
+.apps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.app{display:block;text-align:center;text-decoration:none;padding:12px 6px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;font-weight:600;font-size:.85rem;cursor:pointer}
+.app:active{background:var(--gold);color:var(--on)}
+.sw{width:32px;height:32px;border-radius:50%;border:2px solid var(--line);padding:0;cursor:pointer}
+.sw.on{border-color:var(--ink)}
+input[type=color]{width:38px;height:32px;padding:0;border:0;background:none}
+input[type=range]{width:100%;accent-color:var(--gold)}
+canvas{touch-action:none;cursor:grab}
+.thanks{text-align:center}
+.thanks h2{font-size:1.7rem}
+
+:root{--bg:#f3effb;--card:#fbf9ff;--ink:#2b2438;--muted:#7a6f91;--gold:#8b6fc7;--line:#ded4f2;--wine:#c0467d;--on:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17131f;--card:#201a2c;--ink:#efe9fb;--muted:#a99fc0;--gold:#b9a3f0;--line:#3a2f52;--wine:#e879a8;--on:#17131f}}
+:root[data-theme="dark"]{--bg:#17131f;--card:#201a2c;--ink:#efe9fb;--muted:#a99fc0;--gold:#b9a3f0;--line:#3a2f52;--wine:#e879a8;--on:#17131f}
+body{background:radial-gradient(900px 500px at 85% -5%,rgba(192,132,224,.2),transparent 60%),radial-gradient(700px 500px at -10% 45%,rgba(139,111,199,.16),transparent 60%),var(--bg)}
+h1{background:linear-gradient(90deg,#7a5bc2,#d27bb5);-webkit-background-clip:text;background-clip:text}
+.btn{background:linear-gradient(135deg,#8b6fc7,#c08be0);color:#fff}
+.card{box-shadow:0 12px 32px rgba(122,91,194,.12)}
+#rose{background:radial-gradient(circle at 30% 20%,#b79cf0,#7a5bc2 60%,#4a3585);box-shadow:0 12px 30px rgba(122,91,194,.38)}
+#rose .ily{color:#efe3ff}
+.bgs{display:flex;gap:10px;overflow-x:auto;padding:4px 0 10px}
+.bgs canvas{flex:0 0 auto;width:64px;height:80px;margin:0;border-radius:12px;border:2px solid var(--line);cursor:pointer}
+.bgs canvas.on{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.font-select{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);font:inherit;margin:6px 0 12px}.font-select optgroup{font-weight:700}
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">NAME · POEM · MEMORY</div>
+  <h1>உங்கள் பெயரில் ஒரு கவிதை</h1>
+  <p class="sub">பெயரின் ஒவ்வொரு எழுத்திலும் மலரும் வரிகள் – உங்களுக்காகவோ, உங்களுக்குப் பிடித்தவர்களுக்காகவோ.</p>
+
+  <div class="card">
+    <label for="name">யாருடைய பெயரில்?</label>
+    <input type="text" id="name" maxlength="20" placeholder="உதா: அன்பு / Priya" autocomplete="off">
+    <label style="margin-top:16px">இவர் உங்களுக்கு யார்?</label>
+    <div class="opts" id="rels"></div>
+  </div>
+
+  <div class="card">
+    <h2>பணம் செலுத்த</h2>
+    <button id="rose" type="button"><span class="amt">₹14.3</span><span class="ily">I · LOVE · YOU &nbsp; = &nbsp; 1 · 4 · 3</span></button>
+    <div class="apps" id="apps" style="display:none"></div>
+    <div id="utrbox" style="display:none"><div id="upirow" style="display:none"><p class="note">App திறக்கவில்லையா? எந்த UPI ஆப்பிலும் இந்த ID-க்கு ₹14.30 அனுப்புங்கள்:</p><input type="text" id="upiid" readonly><button class="btn" id="cp" type="button">UPI ID நகலெடு</button></div><label for="utr" style="margin-top:16px">UPI Transaction ID (UTR – 12 இலக்கம்)</label><input type="text" id="utr" inputmode="numeric" maxlength="12" placeholder="உதா: 412345678901" autocomplete="off"><button class="btn" id="done" type="button">பணம் உறுதி செய் – கவிதை வேண்டும்</button><p class="note" id="utrmsg">பணம் செலுத்திய பின் UPI Transaction ID-ஐ உள்ளிடுங்கள். குறிப்பு: 12 இலக்க எண்ணை மட்டும் வைத்து பணம் வந்ததை Website உறுதிப்படுத்த முடியாது; விற்பனையாளர் சரிபார்க்க வேண்டும்.</p></div>
+  </div>
+
+  <div class="card step" id="s3">
+    <h2 id="t3"></h2>
+    <div class="bar" id="bar"><i id="fill"></i></div>
+    <div id="poems"></div>
+    <p class="note" id="mode"></p>
+    <button class="btn" id="pick" type="button" style="display:none">இந்தக் கவிதை பிடித்திருக்கிறது →</button>
+    <button class="btn" id="regen" type="button" style="display:none;background:var(--line);color:var(--ink)">மீண்டும் ஒருமுறை கவிதை உருவாக்கு</button>
+    <p class="note" id="regenNote"></p>
+  </div>
+
+  <div class="card step" id="s4">
+    <h2>உங்கள் கவிதை அட்டை</h2>
+    <label>புகைப்படம் (விரும்பினால்)</label>
+    <input type="file" id="img" accept="image/*">
+    <label>பின்னணி – மனநிலைக்கேற்ப</label><div class="bgs" id="bgs"></div>
+    <label for="fontSelect">Fonts</label><select id="fontSelect" class="font-select"><optgroup label="தமிழ் Fonts"><option value="Kavivanar">Kavivanar</option><option value="Noto Serif Tamil">Noto Serif Tamil</option><option value="Noto Sans Tamil">Noto Sans Tamil</option><option value="Tiro Tamil">Tiro Tamil</option><option value="Hind Madurai">Hind Madurai</option><option value="Mukta Malar">Mukta Malar</option><option value="Meera Inimai">Meera Inimai</option><option value="Arima">Arima</option><option value="Anek Tamil">Anek Tamil</option><option value="Baloo Thambi 2">Baloo Thambi 2</option><option value="Catamaran">Catamaran</option><option value="Kalam">Kalam</option></optgroup><optgroup label="English Fonts"><option value="Playfair Display">Playfair Display</option><option value="Cormorant Garamond">Cormorant Garamond</option><option value="Lora">Lora</option><option value="Merriweather">Merriweather</option><option value="Montserrat">Montserrat</option><option value="Poppins">Poppins</option><option value="Inter">Inter</option><option value="Roboto">Roboto</option><option value="Open Sans">Open Sans</option><option value="Raleway">Raleway</option><option value="Libre Baskerville">Libre Baskerville</option><option value="Cinzel">Cinzel</option><option value="DM Sans">DM Sans</option><option value="Great Vibes">Great Vibes</option><option value="Allura">Allura</option><option value="Dancing Script">Dancing Script</option></optgroup></select>
+    <canvas id="cv" width="1080" height="1350"></canvas>
+    <p class="note">கவிதையை விரலால் இழுத்து விரும்பிய இடத்தில் வைக்கலாம்.</p>
+    <label style="margin-top:12px">எழுத்து அளவு</label><input type="range" id="sz" min="30" max="110" value="64">
+    <label>சீரமைப்பு</label><div class="opts" id="al"></div>
+    <label>எழுத்து நிறம்</label><div class="opts" id="tc"></div>
+    <label>முதல் எழுத்து நிறம்</label><div class="opts" id="hc"></div>
+    <button class="btn" id="rs" type="button" style="background:var(--line);color:var(--ink)">இடத்தை மீட்டமை</button>
+    <button class="btn" id="dl" type="button">படத்தைச் சேமி</button>
+    <p class="note" id="dlnote"></p>
+  </div>
+  <div class="card step thanks" id="s5"><h2>நன்றி 🍁</h2><p>உங்கள் கவிதை அட்டை சேமிக்கப்பட்டது. அன்புக்குரியவரிடம் பகிருங்கள் – மீண்டும் சந்திப்போம்!</p></div>
+</main>
+<script>
+(function(){
+  var UPI="baskarraja1610-2@okicici",AMT="14.30";
+  var $=function(i){return document.getElementById(i)};
+  var RELS=[["friend","நண்பர்","ஒரு உயிர் நண்பனுக்கு/தோழிக்கு நட்பின் பெருமையுடன்"],["lover","காதலர்","காதலர்/காதலிக்கு உருகும் காதலுடன்"],["mother","அம்மா","அம்மாவுக்கு நன்றியும் பாசமும் நிறைந்து"],["father","அப்பா","அப்பாவுக்கு மரியாதையும் பாசமும் நிறைந்து"],["spouse","துணைவர்","வாழ்க்கைத் துணைக்கு அன்பும் நம்பிக்கையும் நிறைந்து"],["sibling","சகோதரர்/சகோதரி","உடன்பிறப்புக்கு குறும்பும் பாசமும் கலந்து"],["self","எனக்காக","தனக்குத் தானே சொல்லும் ஊக்கமும் சுய அன்பும் நிறைந்து, 'நீ' என்று விளித்து"]];
+  var TF=["Kavivanar","Noto Serif Tamil","Noto Sans Tamil","Tiro Tamil","Hind Madurai","Mukta Malar","Meera Inimai","Arima","Anek Tamil","Baloo Thambi 2","Catamaran","Kalam"];
+  var EF=["Playfair Display","Cormorant Garamond","Lora","Merriweather","Montserrat","Poppins","Inter","Roboto","Open Sans","Raleway","Libre Baskerville","Cinzel","DM Sans","Great Vibes","Allura","Dancing Script"];
+  var STYLES=["மென்மையான, உவமை நிறைந்த","கம்பீரமான, இலக்கியச் சுவை மிக்க","இயற்கைப் படிமங்கள் நிறைந்த, இனிமையான"];
+  var t0=0,pending=null,rel=null,tf="Kavivanar",ef="Playfair Display",chosen=null,photo=null,results=[],regenUsed=false,poemLang="tamil";
+  var nameEl=$("name");
+
+  function seg(s,keepSp){
+    if(!keepSp)s=s.replace(/\s+/g,"");
+    try{return Array.from(new Intl.Segmenter("ta",{granularity:"grapheme"}).segment(s),function(x){return x.segment});}catch(e){return Array.from(s);}
+  }
+  var key=function(g){return (g||"").charAt(0).toLowerCase()};
+  function opts(box,list,onpick,sel){
+    list.forEach(function(o){
+      var b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o[1];
+      if(o[0]===sel)b.classList.add("on");
+      b.onclick=function(){Array.from(box.children).forEach(function(c){c.classList.remove("on")});b.classList.add("on");onpick(o);};
+      box.appendChild(b);
+    });
+  }
+  opts($("rels"),RELS,function(o){rel=o;$("rels").classList.remove("err")});
+  function updateFontMenu(lang){
+    var sel=$("fontSelect"),groups=sel.querySelectorAll("optgroup");
+    groups[0].disabled=(lang==="english"); groups[1].disabled=(lang!=="tamil");
+    var desired=lang==="english"?ef:tf;
+    if(lang==="english" && !EF.includes(desired)) desired="Playfair Display";
+    if(lang!=="english" && !TF.includes(desired)) desired="Kavivanar";
+    sel.value=desired;
+  }
+  $("fontSelect").onchange=function(){if(TF.includes(this.value))tf=this.value;else ef=this.value;draw();};
+
+  function shake(el){el.classList.remove("err");void el.offsetWidth;el.classList.add("err");}
+  function petals(el){
+    var r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+    for(var i=0;i<34;i++){
+      var p=document.createElement("span");p.className="petal";
+      p.style.left=cx+"px";p.style.top=cy+"px";
+      p.style.setProperty("--dx",(Math.random()*360-180)+"px");
+      p.style.setProperty("--dy",(Math.random()*400-260)+"px");
+      p.style.setProperty("--r",(Math.random()*720-360)+"deg");
+      p.style.animationDelay=(Math.random()*.3)+"s";
+      document.body.appendChild(p);
+      setTimeout(function(q){return function(){q.remove()}}(p),2900);
+    }
+  }
+  var APPS=[["GPay","tez://upi/pay?"],["PhonePe","phonepe://pay?"],["Paytm","paytmmp://pay?"],["Navi","upi://pay?"],["super.money","upi://pay?"],["Amazon Pay","upi://pay?"]];
+  function payUrl(pre){return pre+"pa="+UPI+"&pn="+encodeURIComponent("Peyar Kavithai")+"&am="+AMT+"&cu=INR&tn="+encodeURIComponent("Kavithai - "+nameEl.value.trim());}
+  $("upiid").value=UPI;
+  $("cp").onclick=function(){var i=$("upiid");i.select();try{navigator.clipboard.writeText(UPI)}catch(e){}try{document.execCommand("copy")}catch(e){}$("cp").textContent="நகலெடுக்கப்பட்டது ✓";};
+  APPS.forEach(function(a){
+    var b=document.createElement("button");b.type="button";b.className="app";b.textContent=a[0];
+    b.onclick=function(){t0=Date.now();$("utrbox").style.display="block";$("upirow").style.display="block";var u=payUrl(a[1]),w=null;try{w=window.open(u,"_blank");}catch(e){}if(!w){try{window.location.href=u;}catch(e){}}};
+    $("apps").appendChild(b);
+  });
+  $("rose").onclick=function(){
+    if(!nameEl.value.trim()){shake(nameEl);nameEl.focus();return;}
+    if(!rel){shake($("rels"));return;}
+    $("apps").style.display="grid";
+  };
+  function usedList(){try{return JSON.parse(localStorage.getItem("kv_utr")||"[]")}catch(e){return[]}}
+  function markUsed(u){try{var l=usedList();l.push(u);localStorage.setItem("kv_utr",JSON.stringify(l))}catch(e){}}
+  function utrOk(u){
+    if(!/^\d{12}$/.test(u))return "12 இலக்க Transaction ID தேவை.";
+    if(/^(\d)\1{11}$/.test(u)||"01234567890123456789".indexOf(u)>-1||"98765432109876543210".indexOf(u)>-1)return "சரியான Transaction ID உள்ளிடுங்கள்.";
+    if(usedList().indexOf(u)>-1&&u!==pending)return "இந்த Transaction ID ஏற்கனவே பயன்படுத்தப்பட்டுள்ளது.";
+    if(!t0||Date.now()-t0<20000)return "முதலில் பணம் செலுத்துங்கள்; பணம் செலுத்திய பின் ID-ஐ உள்ளிடுங்கள்.";
+    return "";
+  }
+  var sleep=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
+  var MODES=["acrostic","embedded"];
+  function isTamil(s){return /[\u0B80-\u0BFF]/.test(s)}
+  function checkPoem(o,L){
+    if(!o||!Array.isArray(o.lines)||o.lines.length!==L.length)return false;
+    return o.lines.every(function(line,i){
+      var gs=seg(String(line),false).map(function(g){return g.toLowerCase()});
+      return gs.indexOf(L[i].toLowerCase())!==-1;
+    });
+  }
+  function promptFor(name,L,lang,style,avoid){
+    return "நீ செம்மையான தமிழ்/ஆங்கிலக் கவிஞர். பெயர்: "+name+". Unicode grapheme எழுத்துகள் வரிசை: "+JSON.stringify(L)+".\n"+
+      "உறவு: "+rel[2]+". கவிதை நடை: "+style+". மொழி: "+lang+".\n"+
+      "மிக முக்கிய விதிகள்: சரியாக "+L.length+" வரிகள் மட்டும். ஒவ்வொரு வரியும் பெயரின் அதே வரிசையிலுள்ள அதற்குரிய எழுத்தை குறைந்தது ஒருமுறை கொண்டிருக்க வேண்டும். இயல்பாகச் சொல்லின் முதல் எழுத்தாக வரக்கூடிய உயிர்/உயிர்மெய் எழுத்துகள் அந்த வரியின் முதல் சொல்லின் தொடக்கத்தில் வரட்டும். ன், ம், ல் போன்ற புள்ளியிட்ட மெய்யெழுத்துகளை வலுக்கட்டாயமாக வரியின் முதல் எழுத்தாக்காதே; அவை இயல்பான சொல்லின் நடுவில் அல்லது முடிவில் வரட்டும். எழுத்துகளைத் தவறாகப் பிரிக்காதே; அர்த்தமற்ற சொற்கள் வேண்டாம். ஒவ்வொரு வரியும் 3-8 சொற்கள், இயல்பான இலக்கணம், உணர்ச்சி, உவமை கொண்டிருக்கட்டும். எல்லா வரிகளும் வேறுபட்ட தொடக்கங்களும் பொருளும் பெறட்டும்.\n"+
+      (avoid?"முந்தைய கவிதையை மீண்டும் பயன்படுத்தாதே; புதிய படிமங்களும் சொற்றொடர்களும் உருவாக்கு. முந்தைய கவிதை: "+avoid:"முன்னர் உருவாக்கிய கவிதை எதுவும் இல்லை.")+"\n"+
+      "JSON மட்டும் திருப்பு: {\"mode\":\"embedded\",\"lines\":[\"...\"]}. விளக்க உரை வேண்டாம்.";
+  }
+  async function makePoem(name,L,lang,style,avoid){
+    var res=await fetch("/.netlify/functions/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:promptFor(name,L,lang,style,avoid)})});
+    var data=await res.json();
+    if(!res.ok)throw new Error(data.error||"கவிதை உருவாக்க முடியவில்லை.");
+    var poem={mode:"embedded",lines:data.lines||[],lang:lang};
+    if(!checkPoem(poem,L))throw new Error("பெயரின் எழுத்து வரிசைக்கு ஏற்ற கவிதை கிடைக்கவில்லை. மீண்டும் முயற்சிக்கவும்.");
+    return poem;
+  }
+  function build(line,o,i){
+    var d=document.createElement("div"),target=seg(nameEl.value.trim())[i],marked=false;
+    seg(line,true).forEach(function(g){
+      if(!marked && g.toLowerCase()===String(target||"").toLowerCase()){
+        var e=document.createElement("em");e.textContent=g;d.appendChild(e);marked=true;
+      } else d.appendChild(document.createTextNode(g));
+    });
+    return d;
+  }
+
+  async function generateAndShow(isRegenerate){
+    var n=nameEl.value.trim(),L=seg(n).slice(0,20);
+    var lang=/^[A-Za-z\s.]+$/.test(n)?"english":"tamil";
+    poemLang=lang;
+    var btn=isRegenerate?$("regen") : $("done");
+    btn.disabled=true;
+    $("s3").style.display="block";$("poems").innerHTML="";$("mode").textContent="";$("pick").style.display="none";
+    $("t3").textContent=n+" – கவிதை உருவாகிறது…";
+    $("bar").style.display="block";$("fill").style.width="35%";$("s3").scrollIntoView({behavior:"smooth"});
+    try{
+      var old=chosen?chosen.lines.join("\n"):"";
+      var poem=await makePoem(n,L,lang,STYLES[Math.floor(Math.random()*STYLES.length)],isRegenerate?old:"");
+      results=[poem];chosen=null;
+      var box=document.createElement("div");box.className="poem sel";
+      var sm=document.createElement("small");sm.textContent="உங்கள் பெயருக்கான கவிதை · "+(lang==="english"?"English":"தமிழ்");box.appendChild(sm);
+      poem.lines.forEach(function(line,i){box.appendChild(build(line,poem,i));});
+      box.onclick=function(){chosen=poem;$("pick").style.display="block";};
+      $("poems").appendChild(box);chosen=poem;
+      $("t3").textContent="உங்கள் பெயருக்கான கவிதை";
+      $("pick").style.display="block";
+      if(!isRegenerate){$("regen").style.display="block";$("regen").disabled=false;$("regenNote").textContent="பிடிக்கவில்லையா? ஒரே ஒரு முறை மட்டும் இலவசமாக மீண்டும் உருவாக்கலாம்.";}
+      else{$("regen").style.display="none";$("regenNote").textContent="மீண்டும் உருவாக்கும் வாய்ப்பு பயன்படுத்தப்பட்டது.";}
+      updateFontMenu(lang);
+    }catch(err){
+      $("t3").textContent="கவிதை உருவாக்க முடியவில்லை";
+      $("mode").textContent=err.message||"சேவையகப் பிழை. சிறிது நேரம் கழித்து முயற்சிக்கவும்.";
+      if(isRegenerate){regenUsed=false;$("regen").disabled=false;}
+      else $("done").disabled=false;
+    }finally{$("bar").style.display="none";}
+  }
+  $("done").onclick=function(){
+    var n=nameEl.value.trim();
+    if(!n){shake(nameEl);nameEl.focus();return;}
+    if(!rel){shake($("rels"));return;}
+    var u=$("utr").value.replace(/\s/g,"");var em=utrOk(u);
+    if(em){shake($("utr"));$("utrmsg").textContent=em;return;}
+    pending=u;markUsed(u);
+    $("utrmsg").textContent="UTR பதிவு செய்யப்பட்டது. குறிப்பு: இந்த Website UPI பணவரவை தானாகச் சரிபார்க்கவில்லை; பணம் வந்ததை விற்பனையாளர் தனியாகச் சரிபார்க்க வேண்டும்.";
+    generateAndShow(false);
+  };
+  $("regen").onclick=function(){
+    if(regenUsed)return;
+    regenUsed=true;$("regen").disabled=true;
+    generateAndShow(true);
+  };
+  $("pick").onclick=function(){bgT=ordered()[0];thumbs();$("s4").style.display="block";$("s4").scrollIntoView({behavior:"smooth"});draw();};
+
+  $("img").onchange=function(e){
+    var f=e.target.files&&e.target.files[0];if(!f)return;
+    var im=new Image();im.onload=function(){photo=im;draw();};im.src=URL.createObjectURL(f);
+  };
+
+  var bgT=null;
+  var THEMES=[
+   {n:"Lavender Dusk",r:["self","friend","lover","sibling"],c:["#5b3fa0","#9b6fd0","#d9a9e8"],k:"bokeh"},
+   {n:"Rose Blush",r:["lover","spouse","mother"],c:["#8e2f64","#c8578f","#f2a6c4"],k:"petals"},
+   {n:"Midnight Stars",r:["lover","friend","self","spouse"],c:["#14123a","#3a2a78","#7a5bc2"],k:"stars"},
+   {n:"Golden Hour",r:["mother","father","friend"],c:["#7a3a2a","#d9774b","#f6c98a"],k:"rays"},
+   {n:"Sea Breeze",r:["sibling","friend","father"],c:["#134a6b","#2f8fb0","#9fdcd9"],k:"waves"},
+   {n:"Mint Meadow",r:["mother","self","sibling"],c:["#1f5a4a","#4aa385","#b7e8c9"],k:"bokeh"},
+   {n:"Sunset Haze",r:["lover","spouse","friend"],c:["#5a2a78","#d4577a","#ffb48a"],k:"bokeh"},
+   {n:"Dream Cloud",r:["self","sibling","friend"],c:["#4a5fa8","#8d9be0","#e0c6f5"],k:"bokeh"},
+   {n:"Warm Maple",r:["father","mother","spouse"],c:["#4a2118","#a8502a","#e8a35f"],k:"petals"},
+   {n:"Ink & Smoke",r:["father","self"],c:["#16161d","#363650","#6f6a8f"],k:"rays"}];
+  function rnd(a){return function(){a=(a*1664525+1013904223)%4294967296;return a/4294967296}}
+  function paintBg(x,t){
+    var g=x.createLinearGradient(0,0,1080*.6,1350),i,R=rnd(t.n.length*7919+11),w=1080,h=1350;
+    g.addColorStop(0,t.c[0]);g.addColorStop(.55,t.c[1]);g.addColorStop(1,t.c[2]);x.fillStyle=g;x.fillRect(0,0,w,h);x.fillStyle="#fff";
+    if(t.k==="bokeh"||t.k==="petals")for(i=0;i<28;i++){var px=R()*w,py=R()*h,r=30+R()*110;x.globalAlpha=.06+R()*.12;x.beginPath();if(t.k==="bokeh")x.arc(px,py,r,0,7);else x.ellipse(px,py,r*.45,r,R()*3,0,7);x.fill();}
+    else if(t.k==="stars")for(i=0;i<90;i++){x.globalAlpha=.3+R()*.7;x.beginPath();x.arc(R()*w,R()*h,.8+R()*3,0,7);x.fill();}
+    else if(t.k==="rays")for(i=0;i<9;i++){var a=R()*w;x.globalAlpha=.05+R()*.07;x.beginPath();x.moveTo(a,0);x.lineTo(a+120+R()*160,0);x.lineTo(a-300+R()*300,h);x.lineTo(a-420+R()*300,h);x.fill();}
+    else for(i=0;i<7;i++){x.globalAlpha=.08+i*.01;x.beginPath();x.moveTo(0,h*.55+i*90);for(var xx=0;xx<=w;xx+=60)x.lineTo(xx,h*.55+i*90+Math.sin(xx/130+i)*28);x.lineTo(w,h);x.lineTo(0,h);x.fill();}
+    x.globalAlpha=1;
+  }
+  function ordered(){var k=rel&&rel[0];return THEMES.slice().sort(function(a,b){return (b.r.indexOf(k)>-1)-(a.r.indexOf(k)>-1)});}
+  function thumbs(){
+    var box=$("bgs");box.innerHTML="";
+    ordered().forEach(function(t){
+      var c=document.createElement("canvas");c.width=108;c.height=135;c.title=t.n;var cx=c.getContext("2d");cx.scale(.1,.1);paintBg(cx,t);
+      if(t===bgT)c.classList.add("on");
+      c.onclick=function(){bgT=t;photo=null;$("img").value="";Array.from(box.children).forEach(function(k){k.classList.remove("on")});c.classList.add("on");draw();};
+      box.appendChild(c);
+    });
+  }
+  var T={size:64,align:"center",color:"#f8efe0",hl:"#f3c982",cx:540,cy:635},drag=null,W=1080,H=1350,cv=$("cv"),loaded="";
+  function fam(l){return '"'+(/[\u0B80-\u0BFF]/.test(l)?tf:ef)+'", serif'}
+  async function draw(){
+    if(!chosen)return;
+    var x=cv.getContext("2d"),txt=chosen.lines.join("")+nameEl.value,k=tf+"|"+ef+"|"+txt;
+    if(k!==loaded){try{await Promise.all([document.fonts.load('48px "'+tf+'"',"கவிதை"+txt),document.fonts.load('48px "'+ef+'"',"Poetry "+txt)]);}catch(e){}loaded=k;}
+    if(photo){var sc=Math.max(W/photo.width,H/photo.height),w=photo.width*sc,h=photo.height*sc;x.drawImage(photo,(W-w)/2,(H-h)/2,w,h);}
+    else paintBg(x,bgT||THEMES[0]);
+    var ov=x.createLinearGradient(0,0,0,H);ov.addColorStop(0,"rgba(0,0,0,.35)");ov.addColorStop(.5,"rgba(0,0,0,.55)");ov.addColorStop(1,"rgba(0,0,0,.45)");
+    x.globalAlpha=photo?1:.3;x.fillStyle=ov;x.fillRect(0,0,W,H);x.globalAlpha=1;
+    x.textBaseline="middle";x.textAlign="left";
+    var L=chosen.lines,n=L.length,lh=T.size*1.7;
+    var ws=L.map(function(l){x.font=T.size+"px "+fam(l);return x.measureText(l).width}),bw=Math.max.apply(null,ws),top=T.cy-(n-1)*lh/2;
+    L.forEach(function(l,i){
+      x.font=T.size+"px "+fam(l);
+      var gs=seg(l,true),target=seg(nameEl.value.trim())[i],hi=-1;
+      gs.forEach(function(g,j){if(hi<0 && g.toLowerCase()===String(target||"").toLowerCase())hi=j;});
+      var bf=gs.slice(0,hi).join(""),hl=gs[hi]||"",af=gs.slice(hi+1).join("");
+      var sx=T.align==="left"?T.cx-bw/2:T.align==="right"?T.cx+bw/2-ws[i]:T.cx-ws[i]/2,y=top+i*lh;
+      x.fillStyle=T.color;x.fillText(bf,sx,y);
+      var b1=x.measureText(bf).width;x.fillStyle=T.hl;x.fillText(hl,sx+b1,y);
+      var b2=x.measureText(hl).width;x.fillStyle=T.color;x.fillText(af,sx+b1+b2,y);
+    });
+    var nm=nameEl.value.trim();x.textAlign="center";x.fillStyle=T.hl;x.font="40px "+fam(nm);
+    x.fillText("— "+nm+" —",W/2,H-110);x.fillRect(W/2-40,H-150,80,2);
+  }
+  function pos(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height}}
+  cv.onpointerdown=function(e){var p=pos(e);drag={dx:T.cx-p.x,dy:T.cy-p.y};try{cv.setPointerCapture(e.pointerId)}catch(_){}};
+  cv.onpointermove=function(e){if(!drag)return;var p=pos(e);T.cx=p.x+drag.dx;T.cy=p.y+drag.dy;draw();};
+  cv.onpointerup=cv.onpointercancel=function(){drag=null};
+  $("sz").oninput=function(){T.size=+this.value;draw()};
+  $("rs").onclick=function(){T.cx=540;T.cy=635;draw()};
+  opts($("al"),[["left","இடது"],["center","நடு"],["right","வலது"]],function(o){T.align=o[0];draw()},"center");
+  function swatches(box,cols,key){
+    cols.forEach(function(c){var b=document.createElement("button");b.type="button";b.className="sw";b.style.background=c;
+      b.onclick=function(){T[key]=c;draw()};box.appendChild(b);});
+    var i=document.createElement("input");i.type="color";i.value=cols[0];i.oninput=function(){T[key]=i.value;draw()};box.appendChild(i);
+  }
+  swatches($("tc"),["#f8efe0","#ffffff","#f3c982","#ffb4c6","#a8e6cf","#111111"],"color");
+  swatches($("hc"),["#f3c982","#ff8fa3","#ffd166","#9bf6ff","#ffffff"],"hl");
+  $("dl").onclick=function(){
+    cv.toBlob(function(blob){
+      if(!blob){$("dlnote").textContent="படத்தை உருவாக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.";return;}
+      var url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="peyar-kavithai.png";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1500);
+      $("dlnote").textContent="கவிதை அட்டை Download செய்யப்பட்டது.";
+      $("s5").style.display="block";$("s5").scrollIntoView({behavior:"smooth"});
+    },"image/png");
+  };
+  (function(){
+    var box=document.createElement("div");box.className="leaves";document.body.appendChild(box);
+    var cols=["#b79cf0","#d8a6e8","#f0a6c8","#9f86e0"];
+    for(var i=0;i<14;i++){
+      var l=document.createElement("span"),sz=16+Math.random()*18;l.className="leaf";
+      l.style.cssText="left:"+Math.random()*100+"%;width:"+sz+"px;height:"+sz+"px;animation-duration:"+(14+Math.random()*12)+"s;animation-delay:-"+Math.random()*20+"s";
+      l.style.setProperty("--sx",(Math.random()*160-80)+"px");l.style.setProperty("--r",(Math.random()*540-270)+"deg");
+      l.style.backgroundImage='url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="'+cols[i%4]+'" d="M12 1l2 5 4-2-1 6 5-1-4 5 2 4-6-1-1 5h-2l-1-5-6 1 2-4-4-5 5 1-1-6 4 2z"/></svg>')+'")';
+      box.appendChild(l);
+    }
+  })();
+  })();
+</script>
+</body>
+</html>
