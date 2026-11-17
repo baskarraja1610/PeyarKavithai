@@ -1,4 +1,3 @@
-
 export default async (request) => {
   const headers = {
     "Content-Type": "application/json",
@@ -26,33 +25,31 @@ export default async (request) => {
       );
     }
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      throw new Error("Anthropic API key is not configured");
+      throw new Error("Gemini API key is not configured");
     }
 
-    const model =
-      process.env.ANTHROPIC_MODEL || "claude-haiku-4-5-20251001";
+    const model = "gemini-2.5-flash";
 
     const response = await fetch(
-      "https://api.anthropic.com/v1/messages",
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model,
-          max_tokens: 2000,
-          messages: [
+          contents: [
             {
-              role: "user",
-              content: prompt
+              parts: [{ text: prompt }]
             }
-          ]
+          ],
+          generationConfig: {
+            responseMimeType: "application/json",
+            maxOutputTokens: 2000
+          }
         })
       }
     );
@@ -61,26 +58,20 @@ export default async (request) => {
 
     if (!response.ok) {
       throw new Error(
-        result.error?.message || "AI generation failed"
+        result.error?.message || "Gemini generation failed"
       );
     }
 
-    const text = result.content
-      ?.filter(item => item.type === "text")
-      .map(item => item.text)
-      .join("\n");
-
-    if (!text) {
-      throw new Error("Empty AI response");
-    }
-
-    const cleaned = text
-      .replace(/^```json\s*/i, "")
-      .replace(/^```\s*/i, "")
-      .replace(/\s*```$/, "")
+    const text = result.candidates?.[0]?.content?.parts
+      ?.map(part => part.text || "")
+      .join("")
       .trim();
 
-    const parsed = JSON.parse(cleaned);
+    if (!text) {
+      throw new Error("Empty Gemini response");
+    }
+
+    const parsed = JSON.parse(text);
 
     if (
       !Array.isArray(parsed.lines) ||
