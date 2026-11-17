@@ -32,7 +32,8 @@ export default async (request) => {
     }
 
     const model = "gemini-3.8-flash";
-
+const startTime = Date.now();
+console.log("Gemini request started");
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
       {
@@ -52,10 +53,10 @@ export default async (request) => {
           }
         })
       }
-    );
+    );f
 
     const result = await response.json();
-
+console.log("Gemini response time:", Date.now() - startTime, "ms");
     if (!response.ok) {
       throw new Error(
         result.error?.message || "Gemini generation failed"
@@ -91,6 +92,8 @@ export default async (request) => {
     );
 
   } catch (error) {
+    console.error("Gemini Error:", error);
+    
     return new Response(
       JSON.stringify({
         success: false,
