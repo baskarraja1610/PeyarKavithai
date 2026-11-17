@@ -70,7 +70,6 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 canvas{touch-action:none;cursor:grab}
 .thanks{text-align:center}
 .thanks h2{font-size:1.7rem}
-
 :root{--bg:#f3effb;--card:#fbf9ff;--ink:#2b2438;--muted:#7a6f91;--gold:#8b6fc7;--line:#ded4f2;--wine:#c0467d;--on:#fff}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17131f;--card:#201a2c;--ink:#efe9fb;--muted:#a99fc0;--gold:#b9a3f0;--line:#3a2f52;--wine:#e879a8;--on:#17131f}}
 :root[data-theme="dark"]{--bg:#17131f;--card:#201a2c;--ink:#efe9fb;--muted:#a99fc0;--gold:#b9a3f0;--line:#3a2f52;--wine:#e879a8;--on:#17131f}
@@ -95,6 +94,9 @@ h1{background:linear-gradient(90deg,#7a5bc2,#d27bb5);-webkit-background-clip:tex
   <div class="card">
     <label for="name">யாருடைய பெயரில்?</label>
     <input type="text" id="name" maxlength="20" placeholder="உதா: அன்பு / Priya" autocomplete="off">
+    <label style="margin-top:16px">கவிதையின் மொழி</label>
+    <div class="opts" id="langOpts"><button class="opt on" type="button" data-lang="tamil">தமிழ்</button><button class="opt" type="button" data-lang="tanglish">Tanglish</button></div>
+    <p class="note" id="langNote">தமிழ் பெயரை உள்ளிட்டு, விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும்.</p>
     <label style="margin-top:16px">இவர் உங்களுக்கு யார்?</label>
     <div class="opts" id="rels"></div>
   </div>
@@ -142,14 +144,21 @@ h1{background:linear-gradient(90deg,#7a5bc2,#d27bb5);-webkit-background-clip:tex
   var TF=["Kavivanar","Noto Serif Tamil","Noto Sans Tamil","Tiro Tamil","Hind Madurai","Mukta Malar","Meera Inimai","Arima","Anek Tamil","Baloo Thambi 2","Catamaran","Kalam"];
   var EF=["Playfair Display","Cormorant Garamond","Lora","Merriweather","Montserrat","Poppins","Inter","Roboto","Open Sans","Raleway","Libre Baskerville","Cinzel","DM Sans","Great Vibes","Allura","Dancing Script"];
   var STYLES=["மென்மையான, உவமை நிறைந்த","கம்பீரமான, இலக்கியச் சுவை மிக்க","இயற்கைப் படிமங்கள் நிறைந்த, இனிமையான"];
-  var t0=0,pending=null,rel=null,tf="Kavivanar",ef="Playfair Display",chosen=null,photo=null,results=[],regenUsed=false,poemLang="tamil";
+  var t0=0,pending=null,rel=null,tf="Kavivanar",ef="Playfair Display",chosen=null,photo=null,results=[],regenUsed=false,poemLang="tamil",selectedLang="tamil";
   var nameEl=$("name");
 
   function seg(s,keepSp){
     if(!keepSp)s=s.replace(/\s+/g,"");
     try{return Array.from(new Intl.Segmenter("ta",{granularity:"grapheme"}).segment(s),function(x){return x.segment});}catch(e){return Array.from(s);}
   }
-  var key=function(g){return (g||"").charAt(0).toLowerCase()};
+  function isTamil(s){return /[\u0B80-\u0BFF]/.test(s)}
+  function isLatinName(s){return /^[A-Za-z\s.'-]+$/.test(s)}
+  function romanInitial(g){
+    var c=String(g||"").charAt(0);
+    var m={"அ":"a","ஆ":"a","இ":"i","ஈ":"i","உ":"u","ஊ":"u","எ":"e","ஏ":"e","ஐ":"i","ஒ":"o","ஓ":"o","ஔ":"au","க":"k","ங":"ng","ச":"s","ஞ":"ny","ட":"t","ண":"n","த":"th","ந":"n","ப":"p","ம":"m","ய":"y","ர":"r","ல":"l","வ":"v","ழ":"zh","ள":"l","ற":"r","ன":"n"};
+    return m[c]||c.toLowerCase();
+  }
+  function targetFor(L,i,lang){return lang==="tanglish"?(isTamil(L[i])?romanInitial(L[i]):String(L[i]||"").toLowerCase()):L[i]}
   function opts(box,list,onpick,sel){
     list.forEach(function(o){
       var b=document.createElement("button");b.type="button";b.className="opt";b.textContent=o[1];
@@ -159,12 +168,25 @@ h1{background:linear-gradient(90deg,#7a5bc2,#d27bb5);-webkit-background-clip:tex
     });
   }
   opts($("rels"),RELS,function(o){rel=o;$("rels").classList.remove("err")});
+  function syncLanguage(){
+    var latin=isLatinName(nameEl.value.trim()) && nameEl.value.trim().length>0;
+    var tamilBtn=$("langOpts").querySelector('[data-lang="tamil"]');
+    tamilBtn.disabled=latin;
+    tamilBtn.style.opacity=latin?".45":"1";
+    if(latin && selectedLang==="tamil"){
+      selectedLang="tanglish";
+      $("langOpts").querySelectorAll(".opt").forEach(function(b){b.classList.toggle("on",b.dataset.lang===selectedLang)});
+    }
+    $("langNote").textContent=latin?"ஆங்கில எழுத்துப் பெயருக்கு Tanglish மட்டும் கிடைக்கும். தமிழ் பெயரை உள்ளிட்டால் தமிழ் / Tanglish இரண்டையும் தேர்ந்தெடுக்கலாம்.":"தமிழ் பெயரை உள்ளிட்டு, விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும்.";
+  }
+  $("langOpts").querySelectorAll(".opt").forEach(function(b){b.onclick=function(){if(b.disabled)return;selectedLang=b.dataset.lang;$("langOpts").querySelectorAll(".opt").forEach(function(x){x.classList.toggle("on",x===b)});}});
+  nameEl.addEventListener("input",syncLanguage);
   function updateFontMenu(lang){
-    var sel=$("fontSelect"),groups=sel.querySelectorAll("optgroup");
-    groups[0].disabled=(lang==="english"); groups[1].disabled=(lang!=="tamil");
-    var desired=lang==="english"?ef:tf;
-    if(lang==="english" && !EF.includes(desired)) desired="Playfair Display";
-    if(lang!=="english" && !TF.includes(desired)) desired="Kavivanar";
+    var sel=$("fontSelect"),groups=sel.querySelectorAll("optgroup"),roman=lang==="tanglish";
+    groups[0].disabled=roman;groups[1].disabled=!roman;
+    var desired=roman?ef:tf;
+    if(roman && !EF.includes(desired))desired="Playfair Display";
+    if(!roman && !TF.includes(desired))desired="Kavivanar";
     sel.value=desired;
   }
   $("fontSelect").onchange=function(){if(TF.includes(this.value))tf=this.value;else ef=this.value;draw();};
@@ -195,10 +217,10 @@ h1{background:linear-gradient(90deg,#7a5bc2,#d27bb5);-webkit-background-clip:tex
   $("rose").onclick=function(){
     if(!nameEl.value.trim()){shake(nameEl);nameEl.focus();return;}
     if(!rel){shake($("rels"));return;}
-    $("apps").style.display="grid";
+    syncLanguage();$("apps").style.display="grid";
   };
   function usedList(){try{return JSON.parse(localStorage.getItem("kv_utr")||"[]")}catch(e){return[]}}
-  function markUsed(u){try{var l=usedList();l.push(u);localStorage.setItem("kv_utr",JSON.stringify(l))}catch(e){}}
+  function markUsed(u){try{var l=usedList();if(l.indexOf(u)<0)l.push(u);localStorage.setItem("kv_utr",JSON.stringify(l))}catch(e){}}
   function utrOk(u){
     if(!/^\d{12}$/.test(u))return "12 இலக்க Transaction ID தேவை.";
     if(/^(\d)\1{11}$/.test(u)||"01234567890123456789".indexOf(u)>-1||"98765432109876543210".indexOf(u)>-1)return "சரியான Transaction ID உள்ளிடுங்கள்.";
@@ -206,82 +228,102 @@ h1{background:linear-gradient(90deg,#7a5bc2,#d27bb5);-webkit-background-clip:tex
     if(!t0||Date.now()-t0<20000)return "முதலில் பணம் செலுத்துங்கள்; பணம் செலுத்திய பின் ID-ஐ உள்ளிடுங்கள்.";
     return "";
   }
-  var sleep=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
-  var MODES=["acrostic","embedded"];
-  function isTamil(s){return /[\u0B80-\u0BFF]/.test(s)}
-  function checkPoem(o,L){
+  function checkPoem(o,L,lang){
     if(!o||!Array.isArray(o.lines)||o.lines.length!==L.length)return false;
     return o.lines.every(function(line,i){
-      var gs=seg(String(line),false).map(function(g){return g.toLowerCase()});
-      return gs.indexOf(L[i].toLowerCase())!==-1;
+      var text=String(line||"").trim();if(!text)return false;
+      var target=targetFor(L,i,lang),plain=text.toLowerCase();
+      if(lang==="tanglish")return new RegExp("^"+String(target).replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),"i").test(text);
+      var gs=seg(text,false).map(function(g){return g.toLowerCase()}),t=String(target||"").toLowerCase();
+      if(/[\u0B80-\u0BFF]/.test(t) && /[்]$/.test(t))return gs.indexOf(t)!==-1;
+      return gs[0]===t;
     });
   }
   function promptFor(name,L,lang,style,avoid){
-    return "நீ செம்மையான தமிழ்/ஆங்கிலக் கவிஞர். பெயர்: "+name+". Unicode grapheme எழுத்துகள் வரிசை: "+JSON.stringify(L)+".\n"+
-      "உறவு: "+rel[2]+". கவிதை நடை: "+style+". மொழி: "+lang+".\n"+
-      "மிக முக்கிய விதிகள்: சரியாக "+L.length+" வரிகள் மட்டும். ஒவ்வொரு வரியும் பெயரின் அதே வரிசையிலுள்ள அதற்குரிய எழுத்தை குறைந்தது ஒருமுறை கொண்டிருக்க வேண்டும். இயல்பாகச் சொல்லின் முதல் எழுத்தாக வரக்கூடிய உயிர்/உயிர்மெய் எழுத்துகள் அந்த வரியின் முதல் சொல்லின் தொடக்கத்தில் வரட்டும். ன், ம், ல் போன்ற புள்ளியிட்ட மெய்யெழுத்துகளை வலுக்கட்டாயமாக வரியின் முதல் எழுத்தாக்காதே; அவை இயல்பான சொல்லின் நடுவில் அல்லது முடிவில் வரட்டும். எழுத்துகளைத் தவறாகப் பிரிக்காதே; அர்த்தமற்ற சொற்கள் வேண்டாம். ஒவ்வொரு வரியும் 3-8 சொற்கள், இயல்பான இலக்கணம், உணர்ச்சி, உவமை கொண்டிருக்கட்டும். எல்லா வரிகளும் வேறுபட்ட தொடக்கங்களும் பொருளும் பெறட்டும்.\n"+
-      (avoid?"முந்தைய கவிதையை மீண்டும் பயன்படுத்தாதே; புதிய படிமங்களும் சொற்றொடர்களும் உருவாக்கு. முந்தைய கவிதை: "+avoid:"முன்னர் உருவாக்கிய கவிதை எதுவும் இல்லை.")+"\n"+
+    var targets=L.map(function(g,i){return targetFor(L,i,lang)});
+    var langRule=lang==="tanglish"?
+      "கவிதை முழுவதும் Tanglish-ல் (தமிழ் மொழியை English/Roman எழுத்துகளில்) மட்டும் எழுது; English translation எழுதாதே. ஒவ்வொரு வரியும் முறையே இந்த Roman initial-களால் தொடங்க வேண்டும்: "+JSON.stringify(targets)+". தமிழ் சொற்களை இயல்பான பேச்சு Tanglish எழுத்தாக்கத்தில் எழுது.":
+      "கவிதை முழுவதும் இயல்பான தமிழில் மட்டும் எழுது. ஒவ்வொரு வரியும் பெயரின் அதே வரிசையிலுள்ள எழுத்தை கொண்டிருக்க வேண்டும். உயிர்/உயிர்மெய் எழுத்து வரியின் முதல் சொல்லின் தொடக்கத்தில் வரட்டும்; புள்ளியிட்ட மெய்யெழுத்துகள் (ன், ம், ல் போன்றவை) இயல்பான சொல்லின் நடுவில் அல்லது முடிவில் வரட்டும்.";
+    return "நீ செம்மையான, இயல்பான தமிழ் கவிஞர். பெயர்: "+name+". Unicode grapheme வரிசை: "+JSON.stringify(L)+".\n"+
+      "உறவு: "+rel[2]+". கவிதை நடை: "+style+". மொழி: "+(lang==="tanglish"?"Tanglish":"தமிழ்")+".\n"+
+      "மிக முக்கியம்: சரியாக "+L.length+" வரிகள் மட்டும். "+langRule+" ஒவ்வொரு வரியும் சுருக்கமாக 3-7 சொற்கள்; எளிய, இனிமையான, அர்த்தமுள்ள கவிதை வரிகள். எழுத்துகளை வலுக்கட்டாயமாகச் சேர்த்து அர்த்தமற்ற சொற்கள் உருவாக்காதே. இலக்கணம் மற்றும் எழுத்துப்பிழை சரியாக இருக்கட்டும். வரிகள் ஒன்றோடொன்று சேர்ந்து ஒரு சிறிய கவிதையாகப் படிக்க வேண்டும்.\n"+
+      (avoid?"முந்தைய கவிதையை மீண்டும் பயன்படுத்தாதே; புதிய படிமங்களும் சொற்றொடர்களும் உருவாக்கு. முந்தைய கவிதை: "+avoid:"புதிய, தனித்துவமான கவிதை உருவாக்கு.")+"\n"+
       "JSON மட்டும் திருப்பு: {\"mode\":\"embedded\",\"lines\":[\"...\"]}. விளக்க உரை வேண்டாம்.";
   }
   async function makePoem(name,L,lang,style,avoid){
     var res=await fetch("/.netlify/functions/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:promptFor(name,L,lang,style,avoid)})});
-    var raw=await res.text();
-console.log("SERVER RESPONSE:",res.status,raw);
-var data=JSON.parse(raw);
+    var raw=await res.text(),data;
+    try{data=JSON.parse(raw)}catch(e){throw new Error("சேவையகத்திலிருந்து சரியான JSON பதில் வரவில்லை. Netlify function-ஐச் சரிபார்க்கவும்.")}
     if(!res.ok)throw new Error(data.error||"கவிதை உருவாக்க முடியவில்லை.");
     var poem={mode:"embedded",lines:data.lines||[],lang:lang};
-    if(!checkPoem(poem,L))throw new Error("பெயரின் எழுத்து வரிசைக்கு ஏற்ற கவிதை கிடைக்கவில்லை. மீண்டும் முயற்சிக்கவும்.");
+    if(!checkPoem(poem,L,lang))throw new Error("பெயரின் எழுத்து வரிசைக்கு ஏற்ற கவிதை கிடைக்கவில்லை.");
     return poem;
   }
-  function build(line,o,i){
-    var d=document.createElement("div"),target=seg(nameEl.value.trim())[i],marked=false;
-    seg(line,true).forEach(function(g){
-      if(!marked && g.toLowerCase()===String(target||"").toLowerCase()){
-        var e=document.createElement("em");e.textContent=g;d.appendChild(e);marked=true;
+
+  function build(line,o,i,lang){
+    var d=document.createElement("div"),target=targetFor(seg(nameEl.value.trim())[i],i,lang),marked=false;
+    var pieces=lang==="tanglish"?Array.from(String(line)):seg(line,true),highlightCount=lang==="tanglish"?String(target||"").length:1;
+    pieces.forEach(function(g,j){
+      var match=lang==="tanglish"?j<highlightCount:g.toLowerCase()===String(target||"").toLowerCase();
+      if(!marked && match){
+        var e=document.createElement("em");e.textContent=g;d.appendChild(e);if(lang!=="tanglish")marked=true;
       } else d.appendChild(document.createTextNode(g));
     });
     return d;
   }
 
-  async function generateAndShow(isRegenerate){
-    var n=nameEl.value.trim(),L=seg(n).slice(0,20);
-    var lang=/^[A-Za-z\s.]+$/.test(n)?"english":"tamil";
+  async function generateAndShow(isRegenerate,utr){
+    var n=nameEl.value.trim(),L=seg(n).slice(0,20),lang=selectedLang;
+    if(!L.length)throw new Error("பெயரை உள்ளிடுங்கள்.");
+    if(isLatinName(n)&&lang==="tamil")lang="tanglish";
     poemLang=lang;
-    var btn=isRegenerate?$("regen") : $("done");
+    var btn=isRegenerate?$("regen"):$("done");
     btn.disabled=true;
     $("s3").style.display="block";$("poems").innerHTML="";$("mode").textContent="";$("pick").style.display="none";
-    $("t3").textContent=n+" – கவிதை உருவாகிறது…";
-    $("bar").style.display="block";$("fill").style.width="35%";$("s3").scrollIntoView({behavior:"smooth"});
+    $("t3").textContent=n+" – 3 கவிதைகள் உருவாகின்றன…";
+    $("bar").style.display="block";$("fill").style.width="4%";$("s3").scrollIntoView({behavior:"smooth"});
     try{
-      var old=chosen?chosen.lines.join("\n"):"";
-      var poem=await makePoem(n,L,lang,STYLES[Math.floor(Math.random()*STYLES.length)],isRegenerate?old:"");
-      results=[poem];chosen=null;
-      var box=document.createElement("div");box.className="poem sel";
-      var sm=document.createElement("small");sm.textContent="உங்கள் பெயருக்கான கவிதை · "+(lang==="english"?"English":"தமிழ்");box.appendChild(sm);
-      poem.lines.forEach(function(line,i){box.appendChild(build(line,poem,i));});
-      box.onclick=function(){chosen=poem;$("pick").style.display="block";};
-      $("poems").appendChild(box);chosen=poem;
-      $("t3").textContent="உங்கள் பெயருக்கான கவிதை";
+      var old=chosen?chosen.lines.join("\n"):"",made=[];
+      for(var i=0;i<3;i++){
+        $("mode").textContent="கவிதை "+(i+1)+" / 3 உருவாக்கப்படுகிறது…";
+        var poem=null,lastError=null;
+        for(var attempt=0;attempt<2&&!poem;attempt++){
+          try{poem=await makePoem(n,L,lang,STYLES[(i+(isRegenerate?1:0))%STYLES.length],(isRegenerate?old+"\n":"")+(attempt?" முந்தைய முயற்சி தவறானது; முற்றிலும் சரியான புதிய வரிகள் கொடு.":""));}
+          catch(e){lastError=e;if(attempt===0)continue;}
+        }
+        if(!poem)throw lastError||new Error("கவிதை உருவாக்க முடியவில்லை.");
+        made.push(poem);$("fill").style.width=((i+1)*32)+"%";
+      }
+      results=made;chosen=made[0];
+      $("poems").innerHTML="";
+      made.forEach(function(poem,index){
+        var box=document.createElement("div");box.className="poem"+(index===0?" sel":"");
+        var sm=document.createElement("small");sm.textContent="கவிதை மாதிரி "+(index+1)+" · "+(lang==="tanglish"?"Tanglish":"தமிழ்")+" · தேர்வு செய்ய அழுத்தவும்";box.appendChild(sm);
+        poem.lines.forEach(function(line,j){box.appendChild(build(line,poem,j,lang));});
+        box.onclick=function(){chosen=poem;Array.from($("poems").children).forEach(function(x){x.classList.remove("sel")});box.classList.add("sel");$("pick").style.display="block";};
+        $("poems").appendChild(box);
+      });
+      $("t3").textContent="உங்கள் பெயருக்கான 3 கவிதைகள்";
+      $("mode").textContent="பிடித்த கவிதையைத் தேர்ந்தெடுத்து அடுத்த படிக்குச் செல்லுங்கள்.";
       $("pick").style.display="block";
-      if(!isRegenerate){$("regen").style.display="block";$("regen").disabled=false;$("regenNote").textContent="பிடிக்கவில்லையா? ஒரே ஒரு முறை மட்டும் இலவசமாக மீண்டும் உருவாக்கலாம்.";}
+      if(!isRegenerate){$("regen").style.display="block";$("regen").disabled=false;$("regenNote").textContent="பிடிக்கவில்லையா? மூன்று புதிய மாதிரிகளை ஒரே ஒரு முறை மீண்டும் உருவாக்கலாம்.";}
       else{$("regen").style.display="none";$("regenNote").textContent="மீண்டும் உருவாக்கும் வாய்ப்பு பயன்படுத்தப்பட்டது.";}
+      if(utr){pending=utr;markUsed(utr);$("utrmsg").textContent="UTR பதிவு செய்யப்பட்டது. குறிப்பு: இந்த Website UPI பணவரவைத் தானாகச் சரிபார்க்கவில்லை; பணம் வந்ததை விற்பனையாளர் தனியாகச் சரிபார்க்க வேண்டும்.";}
       updateFontMenu(lang);
     }catch(err){
       $("t3").textContent="கவிதை உருவாக்க முடியவில்லை";
-      $("mode").textContent=err.message||"சேவையகப் பிழை. சிறிது நேரம் கழித்து முயற்சிக்கவும்.";
-      if(isRegenerate){regenUsed=false;$("regen").disabled=false;}
-      else $("done").disabled=false;
+      $("mode").textContent=(err.message||"சேவையகப் பிழை. சிறிது நேரம் கழித்து முயற்சிக்கவும்.")+" மீண்டும் முயற்சிக்கலாம்; UTR வெற்றிகரமாக உருவான பிறகே பயன்படுத்தப்பட்டதாகப் பதிவு செய்யப்படும்.";
+      if(isRegenerate){regenUsed=false;$("regen").disabled=false;}else $("done").disabled=false;
     }finally{$("bar").style.display="none";}
   }
   $("done").onclick=function(){
     var n=nameEl.value.trim();
     if(!n){shake(nameEl);nameEl.focus();return;}
     if(!rel){shake($("rels"));return;}
+    syncLanguage();
     var u=$("utr").value.replace(/\s/g,"");var em=utrOk(u);
     if(em){shake($("utr"));$("utrmsg").textContent=em;return;}
-    pending=u;markUsed(u);
-    $("utrmsg").textContent="UTR பதிவு செய்யப்பட்டது. குறிப்பு: இந்த Website UPI பணவரவை தானாகச் சரிபார்க்கவில்லை; பணம் வந்ததை விற்பனையாளர் தனியாகச் சரிபார்க்க வேண்டும்.";
-    generateAndShow(false);
+    generateAndShow(false,u);
   };
   $("regen").onclick=function(){
     if(regenUsed)return;
@@ -342,9 +384,10 @@ var data=JSON.parse(raw);
     var ws=L.map(function(l){x.font=T.size+"px "+fam(l);return x.measureText(l).width}),bw=Math.max.apply(null,ws),top=T.cy-(n-1)*lh/2;
     L.forEach(function(l,i){
       x.font=T.size+"px "+fam(l);
-      var gs=seg(l,true),target=seg(nameEl.value.trim())[i],hi=-1;
-      gs.forEach(function(g,j){if(hi<0 && g.toLowerCase()===String(target||"").toLowerCase())hi=j;});
-      var bf=gs.slice(0,hi).join(""),hl=gs[hi]||"",af=gs.slice(hi+1).join("");
+      var gs=poemLang==="tanglish"?Array.from(l):seg(l,true),target=targetFor(seg(nameEl.value.trim())[i],i,poemLang),hi=-1;
+      var highlightCount=1;
+      if(poemLang==="tanglish"){hi=0;highlightCount=String(target||"").length;}else gs.forEach(function(g,j){if(hi<0 && g.toLowerCase()===String(target||"").toLowerCase())hi=j;});
+      var bf=gs.slice(0,hi).join(""),hl=gs.slice(hi,hi+highlightCount).join(""),af=gs.slice(hi+highlightCount).join("");
       var sx=T.align==="left"?T.cx-bw/2:T.align==="right"?T.cx+bw/2-ws[i]:T.cx-ws[i]/2,y=top+i*lh;
       x.fillStyle=T.color;x.fillText(bf,sx,y);
       var b1=x.measureText(bf).width;x.fillStyle=T.hl;x.fillText(hl,sx+b1,y);
