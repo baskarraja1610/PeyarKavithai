@@ -1,118 +1,103 @@
+// Netlify Function  →  /.netlify/functions/generate
+// Env vars (Netlify → Site settings → Environment variables):
+//   GEMINI_API_KEY   (முதன்மை)   |   விரும்பினால்: GEMINI_MODEL (default: gemini-3.5-flash-lite)
+//   மாற்று: ANTHROPIC_API_KEY அல்லது OPENAI_API_KEY
 
-export default async (request) => {
-  const headers = {
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
-  };
+const json = (obj, status = 200) =>
+  new Response(JSON.stringify(obj), {
+    status,
+    headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
+  });
 
-  if (request.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers });
-  }
+const SYSTEM = "நீ தமிழ்க் கவிஞர். கேட்கப்பட்ட JSON வடிவில் மட்டும் பதிலளி; வேறு எதுவும் எழுதாதே.";
 
-  if (request.method !== "POST") {
-    return new Response(
-      JSON.stringify({
-        success: false,
-        error: "Method not allowed"
+async function callGemini(prompt) {
+  const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
+  const r = await fetch(
+    "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent",
+    {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM }] },
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: { responseMimeType: "application/json", temperature: 1, maxOutputTokens: 800 },
       }),
-      { status: 405, headers }
-    );
+    }
+  );
+  if (!r.ok) throw new Error("gemini " + r.status + " " + (await r.text()));
+  const d = await r.json();
+  return (d.candidates?.[0]?.content?.parts || []).map((p) => p.text || "").join("");
+}
+
+async function callAnthropic(prompt) {
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": process.env.ANTHROPIC_API_KEY,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify({
+      model: process.env.ANTHROPIC_MODEL || "claude-sonnet-5-5",
+      max_tokens: 700,
+      system: SYSTEM,
+      messages: [{ role: "user", content: prompt }],
+    }),
+  });
+  if (!r.ok) throw new Error("anthropic " + r.status + " " + (await r.text()));
+  const d = await r.json();
+  return (d.content || []).map((c) => c.text || "").join("");
+}
+
+async function callOpenAI(prompt) {
+  const r = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: "Bearer " + process.env.OPENAI_API_KEY,
+    },
+    body: JSON.stringify({
+      model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: SYSTEM },
+        { role: "user", content: prompt },
+      ],
+    }),
+  });
+  if (!r.ok) throw new Error("openai " + r.status + " " + (await r.text()));
+  const d = await r.json();
+  return d.choices?.[0]?.message?.content || "";
+}
+
+export default async (req) => {
+  if (req.method !== "POST") return json({ error: "POST மட்டும் அனுமதிக்கப்படும்." }, 405);
+
+  let prompt;
+  try {
+    ({ prompt } = await req.json());
+  } catch {
+    return json({ error: "தவறான கோரிக்கை." }, 400);
+  }
+  // இந்த function-ஐ வேறு யாரும் இலவச AI-ஆகப் பயன்படுத்தாமல் இருக்க எளிய சரிபார்ப்பு
+  if (typeof prompt !== "string" || prompt.length < 20 || prompt.length > 8000 || !prompt.includes("Unicode grapheme")) {
+    return json({ error: "தவறான கோரிக்கை." }, 400);
   }
 
   try {
-    const { prompt } = await request.json();
+    let text;
+    if (process.env.GEMINI_API_KEY) text = await callGemini(prompt);
+    else if (process.env.ANTHROPIC_API_KEY) text = await callAnthropic(prompt);
+    else if (process.env.OPENAI_API_KEY) text = await callOpenAI(prompt);
+    else return json({ error: "சேவையகத்தில் API key அமைக்கப்படவில்லை." }, 500);
 
-    if (!prompt || typeof prompt !== "string") {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          error: "Prompt missing"
-        }),
-        { status: 400, headers }
-      );
-    }
-
-    const apiKey = process.env.GEMINI_API_KEY;
-
-    if (!apiKey) {
-      throw new Error("Gemini API key is not configured");
-    }
-
-    const model = "gemini-3.5-flash-lite";
-
-    console.log("Gemini request started");
-
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        signal: AbortSignal.timeout(20000),
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [{ text: prompt }]
-            }
-          ],
-          generationConfig: {
-            responseMimeType: "application/json",
-            maxOutputTokens: 2000
-          }
-        })
-      }
-    );
-
-    console.log("Gemini HTTP status:", response.status);
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(
-        result.error?.message || "Gemini generation failed"
-      );
-    }
-
-    const text = result.candidates?.[0]?.content?.parts
-      ?.map(part => part.text || "")
-      .join("")
-      .trim();
-
-    if (!text) {
-      throw new Error("Empty Gemini response");
-    }
-
-    const parsed = JSON.parse(text);
-
-    if (
-      !Array.isArray(parsed.lines) ||
-      parsed.lines.length === 0 ||
-      parsed.lines.length > 20
-    ) {
-      throw new Error("Invalid poem format");
-    }
-
-    return new Response(
-      JSON.stringify({
-        success: true,
-        mode: "embedded",
-        lines: parsed.lines
-      }),
-      { status: 200, headers }
-    );
-
-  } catch (error) {
-    console.error("Gemini Error:", error);
-
-    return new Response(
-      JSON.stringify({
-        success: false,
-        error: error.name === "TimeoutError"
-          ? "Gemini request timed out. Please try again."
-          : error.message || "Something went wrong"
-      }),
-      { status: 500, headers }
-    );
+    const m = text.match(/\{[\s\S]*\}/);
+    const data = JSON.parse(m ? m[0] : text);
+    if (!Array.isArray(data.lines) || !data.lines.length) throw new Error("lines missing");
+    return json({ lines: data.lines.map((l) => String(l).trim()) });
+  } catch (e) {
+    console.error(e);
+    return json({ error: "கவிதை உருவாக்க முடியவில்லை. மீண்டும் முயலுங்கள்." }, 502);
   }
 };
