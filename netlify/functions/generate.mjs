@@ -12,22 +12,35 @@ const json = (obj, status = 200) =>
 const SYSTEM = "நீ தமிழ்க் கவிஞர். கேட்கப்பட்ட JSON வடிவில் மட்டும் பதிலளி; வேறு எதுவும் எழுதாதே.";
 
 async function callGemini(prompt) {
-  const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
-  const r = await fetch(
-    "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent",
-    {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM }] },
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: "application/json", temperature: 1, maxOutputTokens: 800 },
-      }),
+  // முதலில் உங்கள் model; தோல்வியடைந்தால் மாற்று model
+  const models = [process.env.GEMINI_MODEL || "gemini-3.5-flash-lite", "gemini-flash-lite-latest"];
+  let last;
+  for (const model of models) {
+    try {
+      const r = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent",
+        {
+          method: "POST",
+          headers: { "content-type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: SYSTEM }] },
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType: "application/json", temperature: 1, maxOutputTokens: 2048 },
+          }),
+        }
+      );
+      const body = await r.text();
+      if (!r.ok) throw new Error("gemini " + r.status + " [" + model + "] " + body.slice(0, 300));
+      const d = JSON.parse(body);
+      const t = (d.candidates?.[0]?.content?.parts || []).map((p) => p.text || "").join("");
+      if (!t) throw new Error("gemini empty [" + model + "] " + (d.candidates?.[0]?.finishReason || d.promptFeedback?.blockReason || ""));
+      return t;
+    } catch (e) {
+      last = e;
+      console.error(e.message);
     }
-  );
-  if (!r.ok) throw new Error("gemini " + r.status + " " + (await r.text()));
-  const d = await r.json();
-  return (d.candidates?.[0]?.content?.parts || []).map((p) => p.text || "").join("");
+  }
+  throw last;
 }
 
 async function callAnthropic(prompt) {
@@ -98,6 +111,8 @@ export default async (req) => {
     return json({ lines: data.lines.map((l) => String(l).trim()) });
   } catch (e) {
     console.error(e);
-    return json({ error: "கவிதை உருவாக்க முடியவில்லை. மீண்டும் முயலுங்கள்." }, 502);
+    // சோதனை காலத்தில் காரணத்தைக் காட்டுகிறது; எல்லாம் சரியானதும் இந்த (why) பகுதியை நீக்கிவிடலாம்
+    const why = String((e && e.message) || "").replace(/key=[^&\s"]+/gi, "").slice(0, 220);
+    return json({ error: "கவிதை உருவாக்க முடியவில்லை. (" + why + ")" }, 502);
   }
 };
