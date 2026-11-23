@@ -82,9 +82,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
   <div class="card">
     <h2>பணம் செலுத்த</h2>
     <button id="rose" type="button"><span class="amt">₹14.3</span><span class="ily">I · LOVE · YOU &nbsp; = &nbsp; 1 · 4 · 3</span></button>
-    <div class="apps" id="apps" style="display:none"></div>
-    <div id="qrbox" style="display:none;text-align:center;margin-top:16px"><div id="qr" style="display:inline-block;background:#fff;padding:14px;border-radius:16px"></div><p class="note">மொபைலில் GPay / PhonePe / Paytm திறந்து இந்த QR-ஐ ஸ்கேன் செய்து ₹14.30 செலுத்துங்கள்.</p></div>
-    <div id="utrbox" style="display:none"><div id="upirow" style="display:none"><p class="note">App திறக்கவில்லையா? எந்த UPI ஆப்பிலும் இந்த ID-க்கு ₹14.30 அனுப்புங்கள்:</p><input type="text" id="upiid" readonly><button class="btn" id="cp" type="button">UPI ID நகலெடு</button></div><label for="utr" style="margin-top:16px">UPI Transaction ID (UTR – 12 இலக்கம்)</label><input type="text" id="utr" inputmode="numeric" maxlength="12" placeholder="உதா: 412345678901" autocomplete="off"><button class="btn" id="done" type="button">பணம் உறுதி செய் – கவிதை வேண்டும்</button><p class="note" id="utrmsg">பணம் செலுத்திய பின் UPI Transaction ID-ஐ உள்ளிடுங்கள். குறிப்பு: 12 இலக்க எண்ணை மட்டும் வைத்து பணம் வந்ததை Website உறுதிப்படுத்த முடியாது; விற்பனையாளர் சரிபார்க்க வேண்டும்.</p></div>
+    <p class="note" id="paymentmsg" aria-live="polite">பாதுகாப்பான Razorpay Checkout மூலம் ₹14.30 செலுத்துங்கள். Payment உறுதியான பிறகே கவிதை உருவாகும்.</p>
   </div>
 
   <div class="card step" id="s3">
@@ -115,10 +113,9 @@ input[type=range]{width:100%;accent-color:var(--gold)}
   </div>
   <div class="card step thanks" id="s5"><h2>நன்றி 🍁</h2><p>உங்கள் கவிதை அட்டை சேமிக்கப்பட்டது. அன்புக்குரியவரிடம் பகிருங்கள் – மீண்டும் சந்திப்போம்!</p></div>
 </main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 (function(){
-  var UPI="baskarraja1610-2@okicici",AMT="14.30";
   var $=function(i){return document.getElementById(i)};
   var RELS=[["friend","நண்பர்","ஒரு உயிர் நண்பனுக்கு/தோழிக்கு நட்பின் பெருமையுடன்"],["lover","காதலர்","காதலர்/காதலிக்கு உருகும் காதலுடன்"],["mother","அம்மா","அம்மாவுக்கு நன்றியும் பாசமும் நிறைந்து"],["father","அப்பா","அப்பாவுக்கு மரியாதையும் பாசமும் நிறைந்து"],["spouse","துணைவர்","வாழ்க்கைத் துணைக்கு அன்பும் நம்பிக்கையும் நிறைந்து"],["sibling","சகோதரர்/சகோதரி","உடன்பிறப்புக்கு குறும்பும் பாசமும் கலந்து"],["self","எனக்காக","தனக்குத் தானே சொல்லும் ஊக்கமும் சுய அன்பும் நிறைந்து, 'நீ' என்று விளித்து"]];
   var TF=["Kavivanar","Karla Tamil Inclined","Meera Inimai","Arima","Anek Tamil","Pavanam","Tiro Tamil","Baloo Thambi 2","Hind Madurai","Catamaran","Mukta Malar","Noto Serif Tamil","Noto Sans Tamil"];
@@ -127,7 +124,7 @@ input[type=range]{width:100%;accent-color:var(--gold)}
   var STYLES=["மென்மையான, உவமை நிறைந்த","கம்பீரமான, இலக்கியச் சுவை மிக்க","இயற்கைப் படிமங்கள் நிறைந்த, இனிமையான"];
   var LIT={friend:"புறநானூறு காட்டும் கோப்பெருஞ்சோழன்–பிசிராந்தையார் போன்ற உயிர்த்தோழமை; திருக்குறள் 'நட்பு' அதிகாரப் பண்பு",lover:"அகநானூறு, குறுந்தொகை, நற்றிணை, ஐங்குறுநூறு காட்டும் தலைவன்–தலைவி அன்பு; குறிஞ்சி, முல்லை, மருதம், நெய்தல் திணைப் படிமங்கள் (நிலவு, தென்றல், மழை, கடல், மலர்)",mother:"புறநானூற்றுத் தாய்மைப் பெருமிதம், நாலடியார் கூறும் தியாகம்; தாயின் மடி, அமுதம், ஒளிவிளக்கு",father:"புறநானூற்றுத் தந்தை தோள்வலிமை, நான்மணிக்கடிகை, இனியவை நாற்பது போன்ற அறநூல் பண்பு; வழிகாட்டும் கலங்கரை விளக்கம், ஆலமரம்",spouse:"கலித்தொகை, திருக்குறள் 'வாழ்க்கைத்துணைநலம்' கூறும் இணைபிரியா அன்பு; இல்லறம், இருவர் ஓருயிர்",sibling:"பதினெண்கீழ்க்கணக்கு கூறும் உடன்பிறந்தார் உறவு; ஒரே கொடியின் இருமலர், தோள்துணை",self:"திருக்குறள் ஆள்வினையுடைமை, ஊக்கமுடைமை போன்ற தன்னம்பிக்கை; விடியலின் ஒளி, மலரும் மொட்டு"};
   var LITBASE="இலக்கிய வழிகாட்டி: சங்க இலக்கியம் (பதினெண்மேற்கணக்கு: எட்டுத்தொகை – அகநானூறு, குறுந்தொகை, நற்றிணை, ஐங்குறுநூறு, கலித்தொகை, புறநானூறு; பத்துப்பாட்டு), திருக்குறள், பதினெண்கீழ்க்கணக்கு (நாலடியார், நான்மணிக்கடிகை, இனியவை நாற்பது, இன்னா நாற்பது, திரிகடுகம்), தொல்காப்பியம் கூறும் உவமை, உள்ளுறை, இறைச்சி நுட்பங்கள் ஆகியவற்றின் சுவையையும் நடையையும் பின்பற்று; எந்த நூலின் வரியையும் நகலெடுக்காதே, புதிய வரிகள் மட்டும் எழுது. ஐந்திணைப் படிமங்கள் (குறிஞ்சி-மலை, முல்லை-காடு, மருதம்-வயல், நெய்தல்-கடல், பாலை), நிலவு, தென்றல், கார்முகில், அன்றில் போன்ற செந்தமிழ்ச் சொற்களை எளிய, பொருள் புரியும் வகையில் பயன்படுத்து. இலக்கணம் (சந்தி, வல்லினம் மிகுதல்/மிகாமை, வேற்றுமை உருபு) சரியாக இருக்கட்டும்; இயன்றவரை மோனை, எதுகை, இயைபு அமைத்து இசை நயம் கொடு. பேச்சுவழக்கு, ஆங்கிலக் கலப்பு வேண்டாம். ஒவ்வொரு வரியும் ஒரு தனிப் படிமம் அல்லது உணர்வு; வரிகள் சேர்ந்து ஒரு சிறு கவிதையாக முடிய வேண்டும். Tanglish எனில் இதே சுவையையும் படிமங்களையும் Roman எழுத்தில் கொண்டு வா. இறுதி வடிவம் மட்டும் தா.";
-  var t0=0,pending=null,rel=null,tf="Kavivanar",ef="Playfair Display",chosen=null,photo=null,results=[],regenUsed=false,poemLang="tamil",selectedLang="tamil";
+  var rel=null,tf="Kavivanar",ef="Playfair Display",chosen=null,photo=null,results=[],regenUsed=false,poemLang="tamil",selectedLang="tamil",currentOrder=null;
   var nameEl=$("name");
 
   function seg(s,keepSp){
@@ -176,36 +173,85 @@ input[type=range]{width:100%;accent-color:var(--gold)}
 
   function shake(el){el.classList.remove("err");void el.offsetWidth;el.classList.add("err");}
 
-  var APPS=[["GPay","tez://upi/pay?"],["PhonePe","phonepe://pay?"],["Paytm","paytmmp://pay?"],["Navi","upi://pay?"],["super.money","upi://pay?"],["Amazon Pay","upi://pay?"]];
-  function payUrl(pre){return pre+"pa="+UPI+"&pn="+encodeURIComponent("Peyar Kavithai")+"&am="+AMT+"&cu=INR&tn="+encodeURIComponent("Kavithai - "+nameEl.value.trim());}
-  $("upiid").value=UPI;
-  $("cp").onclick=function(){var i=$("upiid");i.select();try{navigator.clipboard.writeText(UPI)}catch(e){}try{document.execCommand("copy")}catch(e){}$("cp").textContent="நகலெடுக்கப்பட்டது ✓";};
-  APPS.forEach(function(a){
-    var b=document.createElement("button");b.type="button";b.className="app";b.textContent=a[0];
-    b.onclick=function(){t0=Date.now();$("utrbox").style.display="block";$("upirow").style.display="block";var u=payUrl(a[1]),w=null;try{w=window.open(u,"_blank");}catch(e){}if(!w){try{window.location.href=u;}catch(e){}}};
-    $("apps").appendChild(b);
-  });
-  var isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&matchMedia("(pointer:coarse)").matches);
-  function showQR(){
-    t0=Date.now();$("qrbox").style.display="block";$("utrbox").style.display="block";$("upirow").style.display="block";
-    var q=$("qr");q.innerHTML="";
-    try{new QRCode(q,{text:payUrl("upi://pay?"),width:220,height:220,correctLevel:QRCode.CorrectLevel.M});}catch(e){q.textContent="QR உருவாகவில்லை – கீழே உள்ள UPI ID-ஐப் பயன்படுத்துங்கள்.";}
+  function paymentMessage(message){$("paymentmsg").textContent=message;}
+  function saveOrder(){try{if(currentOrder)sessionStorage.setItem("pk_current_order",JSON.stringify(currentOrder));}catch(e){}}
+  function loadOrder(){try{var x=JSON.parse(sessionStorage.getItem("pk_current_order")||"null");if(x&&x.order_id&&x.access_token)return x;}catch(e){}return null;}
+  function openCheckout(order){
+    var options={
+      key:order.key_id,amount:1430,currency:"INR",order_id:order.order_id,
+      name:"பெயர்கவிதை",description:"உங்கள் பெயருக்கான மூன்று கவிதைகள்",
+      image:"",theme:{color:"#8b6fc7"},
+      handler:async function(payment){await verifyAndGenerate(payment);},
+      modal:{ondismiss:function(){paymentMessage("Payment முடிக்கப்படவில்லை. பணம் செலுத்தியிருந்தால் பக்கத்தை refresh செய்யுங்கள்; மீண்டும் தொடரலாம்.");$("rose").disabled=false;}}
+    };
+    var checkout=new Razorpay(options);
+    checkout.on("payment.failed",function(){paymentMessage("Payment தோல்வியடைந்தது. பணம் பிடித்திருந்தால் மீண்டும் செலுத்த வேண்டாம்; அதே Order-ஐ மீண்டும் சரிபார்க்கலாம்.");$("rose").disabled=false;});
+    checkout.open();
   }
-  $("rose").onclick=function(){
-    if(!nameEl.value.trim()){shake(nameEl);nameEl.focus();return;}
+  async function createOrderAndPay(){
+    if(currentOrder){
+      if(!nameEl.value)nameEl.value=currentOrder.name||"";
+      rel=RELS.find(function(x){return x[0]===currentOrder.relationship})||rel;
+      selectedLang=currentOrder.language||selectedLang;
+      $("rose").disabled=true;
+      try{
+        var statusResponse=await fetch("/.netlify/functions/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({order_id:currentOrder.order_id,access_token:currentOrder.access_token,action:"status"})});
+        var statusData=await statusResponse.json();
+        if(!statusResponse.ok)throw new Error(statusData.error||"Order நிலையைப் பெற முடியவில்லை.");
+        if(statusData.status==="paid"||statusData.status==="delivered"){
+          if(!nameEl.value)nameEl.value=currentOrder.name||statusData.name||"";
+          await generateAndShow(false);
+        }else openCheckout(currentOrder);
+      }catch(error){paymentMessage(error.message||"Order மீண்டும் திறக்க முடியவில்லை.");$("rose").disabled=false;}
+      return;
+    }
+    var name=nameEl.value.trim();
+    if(!name){shake(nameEl);nameEl.focus();return;}
     if(!rel){shake($("rels"));return;}
     syncLanguage();
-    if(isMobile){$("apps").style.display="grid";}else{showQR();}
-  };
-  function usedList(){try{return JSON.parse(localStorage.getItem("kv_utr")||"[]")}catch(e){return[]}}
-  function markUsed(u){try{var l=usedList();if(l.indexOf(u)<0)l.push(u);localStorage.setItem("kv_utr",JSON.stringify(l))}catch(e){}}
-  function utrOk(u){
-    if(!/^\d{12}$/.test(u))return "12 இலக்க Transaction ID தேவை.";
-    if(/^(\d)\1{11}$/.test(u)||"01234567890123456789".indexOf(u)>-1||"98765432109876543210".indexOf(u)>-1)return "சரியான Transaction ID உள்ளிடுங்கள்.";
-    if(usedList().indexOf(u)>-1&&u!==pending)return "இந்த Transaction ID ஏற்கனவே பயன்படுத்தப்பட்டுள்ளது.";
-    if(!t0||Date.now()-t0<20000)return "முதலில் பணம் செலுத்துங்கள்; பணம் செலுத்திய பின் ID-ஐ உள்ளிடுங்கள்.";
-    return "";
+    var L=seg(name).slice(0,20),lang=selectedLang;
+    if(isLatinName(name)&&lang==="tamil")lang="tanglish";
+    if(!L.length){shake(nameEl);return;}
+    if(typeof window.Razorpay!=="function"){
+      paymentMessage("Payment திரை ஏற்றப்படவில்லை. இணைய இணைப்பைச் சரிபார்த்து பக்கத்தை மீண்டும் திறக்கவும்.");return;
+    }
+    $("rose").disabled=true;
+    paymentMessage("பாதுகாப்பான Payment Order உருவாக்கப்படுகிறது…");
+    try{
+      var prompts=STYLES.map(function(style){return promptFor(name,L,lang,style,"")});
+      var response=await fetch("/.netlify/functions/create-order",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({name:name,relationship:rel[0],language:lang,prompts:prompts})
+      });
+      var data=await response.json();
+      if(!response.ok||!data.success)throw new Error(data.error||"Payment Order உருவாக்க முடியவில்லை.");
+      currentOrder={order_id:data.order_id,access_token:data.access_token,key_id:data.key_id,name:name,language:lang,relationship:rel[0]};
+      saveOrder();
+      openCheckout(currentOrder);
+    }catch(error){paymentMessage(error.message||"Payment தொடங்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.");$("rose").disabled=false;}
   }
+  async function verifyAndGenerate(payment){
+    if(!currentOrder)return;
+    paymentMessage("Payment உறுதிப்படுத்தப்படுகிறது. தயவுசெய்து பக்கத்தை மூடாதீர்கள்…");
+    try{
+      var verified=false,lastError="";
+      for(var i=0;i<4&&!verified;i++){
+        var r=await fetch("/.netlify/functions/verify-payment",{
+          method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({razorpay_order_id:payment.razorpay_order_id,razorpay_payment_id:payment.razorpay_payment_id,razorpay_signature:payment.razorpay_signature,access_token:currentOrder.access_token})
+        });
+        var d=await r.json();
+        if(r.ok&&d.status==="paid")verified=true;
+        else if(r.status===202){lastError=d.message||"Payment உறுதிப்படுத்தப்படுகிறது…";await new Promise(function(resolve){setTimeout(resolve,1800)});}
+        else throw new Error(d.error||d.message||"Payment சரிபார்க்கப்படவில்லை.");
+      }
+      if(!verified)throw new Error(lastError||"Payment இன்னும் உறுதிப்படுத்தப்படவில்லை. Order பாதுகாப்பாகச் சேமிக்கப்பட்டுள்ளது; மீண்டும் முயற்சிக்கவும்.");
+      paymentMessage("Payment வெற்றிகரமாக உறுதிப்படுத்தப்பட்டது. உங்கள் கவிதைகள் உருவாகின்றன…");
+      await generateAndShow(false);
+    }catch(error){paymentMessage((error.message||"Payment சரிபார்ப்பில் சிக்கல்.")+" பக்கத்தை refresh செய்தும் மீண்டும் தொடரலாம்.");$("rose").disabled=false;}
+  }
+  $("rose").onclick=createOrderAndPay;
+
   function checkPoem(o,L,lang){
     if(!o||!Array.isArray(o.lines)||o.lines.length!==L.length)return false;
     return o.lines.every(function(line,i){
@@ -229,14 +275,17 @@ input[type=range]{width:100%;accent-color:var(--gold)}
       (avoid?"முந்தைய கவிதையை மீண்டும் பயன்படுத்தாதே; புதிய படிமங்களும் சொற்றொடர்களும் உருவாக்கு. முந்தைய கவிதை: "+avoid:"புதிய, தனித்துவமான கவிதை உருவாக்கு.")+"\n"+
       "JSON மட்டும் திருப்பு: {\"mode\":\"embedded\",\"lines\":[\"...\"]}. விளக்க உரை வேண்டாம்.";
   }
-  async function makePoem(name,L,lang,style,avoid){
-    var res=await fetch("/.netlify/functions/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:promptFor(name,L,lang,style,avoid)})});
-    var raw=await res.text(),data;
-    try{data=JSON.parse(raw)}catch(e){throw new Error("சேவையகத்திலிருந்து சரியான JSON பதில் வரவில்லை. Netlify function-ஐச் சரிபார்க்கவும்.")}
-    if(!res.ok)throw new Error(data.error||"கவிதை உருவாக்க முடியவில்லை.");
-    var poem={mode:"embedded",lines:data.lines||[],lang:lang};
-    if(!checkPoem(poem,L,lang))throw new Error("பெயரின் எழுத்து வரிசைக்கு ஏற்ற கவிதை கிடைக்கவில்லை.");
-    return poem;
+  async function requestPoems(action){
+    if(!currentOrder)throw new Error("உங்கள் Payment Order கிடைக்கவில்லை. பக்கத்தை refresh செய்து மீண்டும் முயற்சிக்கவும்.");
+    var response=await fetch("/.netlify/functions/generate",{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({order_id:currentOrder.order_id,access_token:currentOrder.access_token,action:action})
+    });
+    var raw=await response.text(),data;
+    try{data=JSON.parse(raw)}catch(e){throw new Error("சேவையகத்திலிருந்து சரியான பதில் வரவில்லை.");}
+    if(!response.ok)throw new Error(data.error||"கவிதை உருவாக்க முடியவில்லை.");
+    if(!Array.isArray(data.poems)||data.poems.length!==3)throw new Error("மூன்று கவிதைகளும் முழுமையாக வரவில்லை. மீண்டும் முயற்சிக்கவும்.");
+    return data;
   }
 
   function build(line,o,i,lang){
@@ -251,29 +300,24 @@ input[type=range]{width:100%;accent-color:var(--gold)}
     return d;
   }
 
-  async function generateAndShow(isRegenerate,utr){
-    var n=nameEl.value.trim(),L=seg(n).slice(0,20),lang=selectedLang;
+  async function generateAndShow(isRegenerate){
+    var n=nameEl.value.trim(),L=seg(n).slice(0,20),lang=currentOrder?currentOrder.language:selectedLang;
     if(!L.length)throw new Error("பெயரை உள்ளிடுங்கள்.");
     if(isLatinName(n)&&lang==="tamil")lang="tanglish";
     poemLang=lang;
-    var btn=isRegenerate?$("regen"):$("done");
+    var btn=isRegenerate?$("regen"):$("rose");
     btn.disabled=true;
     $("s3").style.display="block";$("poems").innerHTML="";$("mode").textContent="";$("pick").style.display="none";
     $("t3").textContent=n+" – 3 கவிதைகள் உருவாகின்றன…";
-    $("bar").style.display="block";$("fill").style.width="4%";$("s3").scrollIntoView({behavior:"smooth"});
+    $("bar").style.display="block";$("fill").style.width="12%";$("s3").scrollIntoView({behavior:"smooth"});
     try{
-      var old=chosen?chosen.lines.join("\n"):"",made=[];
-      for(var i=0;i<3;i++){
-        $("mode").textContent="கவிதை "+(i+1)+" / 3 உருவாக்கப்படுகிறது…";
-        var poem=null,lastError=null;
-        for(var attempt=0;attempt<2&&!poem;attempt++){
-          try{poem=await makePoem(n,L,lang,STYLES[(i+(isRegenerate?1:0))%STYLES.length],(isRegenerate?old+"\n":"")+(attempt?" முந்தைய முயற்சி தவறானது; முற்றிலும் சரியான புதிய வரிகள் கொடு.":""));}
-          catch(e){lastError=e;if(attempt===0)continue;}
-        }
-        if(!poem)throw lastError||new Error("கவிதை உருவாக்க முடியவில்லை.");
-        made.push(poem);$("fill").style.width=((i+1)*32)+"%";
+      var data=await requestPoems(isRegenerate?"regenerate":"generate");
+      var made=data.poems.map(function(p){return {mode:"embedded",lines:p.lines,lang:lang};});
+      for(var j=0;j<made.length;j++){
+        if(!checkPoem(made[j],L,lang))throw new Error("பெயரின் எழுத்து வரிசைக்கு ஏற்ற கவிதை கிடைக்கவில்லை. மீண்டும் முயற்சிக்கவும்.");
+        $("fill").style.width=((j+1)*30)+"%";
       }
-      results=made;chosen=made[0];
+      results=made;chosen=made[0];regenUsed=!!data.regen_used;
       $("poems").innerHTML="";
       made.forEach(function(poem,index){
         var box=document.createElement("div");box.className="poem"+(index===0?" sel":"");
@@ -285,28 +329,20 @@ input[type=range]{width:100%;accent-color:var(--gold)}
       $("t3").textContent="உங்கள் பெயருக்கான 3 கவிதைகள்";
       $("mode").textContent="பிடித்த கவிதையைத் தேர்ந்தெடுத்து அடுத்த படிக்குச் செல்லுங்கள்.";
       $("pick").style.display="block";
-      if(!isRegenerate){$("regen").style.display="block";$("regen").disabled=false;$("regenNote").textContent="பிடிக்கவில்லையா? மூன்று புதிய மாதிரிகளை ஒரே ஒரு முறை மீண்டும் உருவாக்கலாம்.";}
+      if(!regenUsed){$("regen").style.display="block";$("regen").disabled=false;$("regenNote").textContent="பிடிக்கவில்லையா? மூன்று புதிய மாதிரிகளை ஒரே ஒரு முறை மீண்டும் உருவாக்கலாம்.";}
       else{$("regen").style.display="none";$("regenNote").textContent="மீண்டும் உருவாக்கும் வாய்ப்பு பயன்படுத்தப்பட்டது.";}
-      if(utr){pending=utr;markUsed(utr);$("utrmsg").textContent="UTR பதிவு செய்யப்பட்டது. குறிப்பு: இந்த Website UPI பணவரவைத் தானாகச் சரிபார்க்கவில்லை; பணம் வந்ததை விற்பனையாளர் தனியாகச் சரிபார்க்க வேண்டும்.";}
+      paymentMessage("Payment உறுதி செய்யப்பட்டது. உங்கள் கவிதைகள் பாதுகாப்பாகச் சேமிக்கப்பட்டுள்ளன.");
       updateFontMenu(lang);
     }catch(err){
       $("t3").textContent="கவிதை உருவாக்க முடியவில்லை";
-      $("mode").textContent=(err.message||"சேவையகப் பிழை. சிறிது நேரம் கழித்து முயற்சிக்கவும்.")+" மீண்டும் முயற்சிக்கலாம்; UTR வெற்றிகரமாக உருவான பிறகே பயன்படுத்தப்பட்டதாகப் பதிவு செய்யப்படும்.";
-      if(isRegenerate){regenUsed=false;$("regen").disabled=false;}else $("done").disabled=false;
+      $("mode").textContent=(err.message||"சேவையகப் பிழை.")+" உங்கள் Payment பாதுகாப்பாக உள்ளது; மீண்டும் முயற்சிக்கலாம்.";
+      if(isRegenerate){regenUsed=false;$("regen").disabled=false;}else $("rose").disabled=false;
+      paymentMessage("உங்கள் Payment Order பாதுகாப்பாக உள்ளது. மீண்டும் முயற்சிக்கவும்.");
     }finally{$("bar").style.display="none";}
   }
-  $("done").onclick=function(){
-    var n=nameEl.value.trim();
-    if(!n){shake(nameEl);nameEl.focus();return;}
-    if(!rel){shake($("rels"));return;}
-    syncLanguage();
-    var u=$("utr").value.replace(/\s/g,"");var em=utrOk(u);
-    if(em){shake($("utr"));$("utrmsg").textContent=em;return;}
-    generateAndShow(false,u);
-  };
   $("regen").onclick=function(){
     if(regenUsed)return;
-    regenUsed=true;$("regen").disabled=true;
+    $("regen").disabled=true;
     generateAndShow(true);
   };
   $("pick").onclick=function(){bgT=ordered()[0];thumbs();$("s4").style.display="block";$("s4").scrollIntoView({behavior:"smooth"});updateFontMenu(poemLang);draw();};
@@ -397,6 +433,31 @@ input[type=range]{width:100%;accent-color:var(--gold)}
       $("s5").style.display="block";$("s5").scrollIntoView({behavior:"smooth"});
     },"image/png");
   };
+  (async function restorePaidOrder(){
+    currentOrder=loadOrder();
+    if(!currentOrder)return;
+    paymentMessage("முன்னர் தொடங்கிய Order நிலை சரிபார்க்கப்படுகிறது…");
+    try{
+      var r=await fetch("/.netlify/functions/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({order_id:currentOrder.order_id,access_token:currentOrder.access_token,action:"status"})});
+      var d=await r.json();
+      if(!r.ok)throw new Error(d.error||"Order கிடைக்கவில்லை.");
+      if(d.status==="paid"||d.status==="delivered"){
+        nameEl.value=currentOrder.name||d.name||"";
+        selectedLang=currentOrder.language||d.language||"tamil";
+        var relationshipKey=currentOrder.relationship||d.relationship||"friend";
+        rel=RELS.find(function(x){return x[0]===relationshipKey})||RELS[0];
+        if(d.poems){
+          var L=seg(nameEl.value).slice(0,20);poemLang=selectedLang;results=d.poems.map(function(p){return {mode:"embedded",lines:p.lines,lang:poemLang}});chosen=results[0];regenUsed=!!d.regen_used;
+          $("s3").style.display="block";$("poems").innerHTML="";
+          results.forEach(function(poem,index){var box=document.createElement("div");box.className="poem"+(index===0?" sel":"");var sm=document.createElement("small");sm.textContent="கவிதை மாதிரி "+(index+1);box.appendChild(sm);poem.lines.forEach(function(line,j){box.appendChild(build(line,poem,j,poemLang));});box.onclick=function(){chosen=poem;Array.from($("poems").children).forEach(function(x){x.classList.remove("sel")});box.classList.add("sel");$("pick").style.display="block";};$("poems").appendChild(box);});
+          $("t3").textContent="உங்கள் பெயருக்கான 3 கவிதைகள்";$("mode").textContent="உங்கள் Payment-இல் உருவாக்கப்பட்ட கவிதைகள் மீட்கப்பட்டன.";$("pick").style.display="block";
+          if(!regenUsed){$("regen").style.display="block";$("regen").disabled=false;}else{$("regen").style.display="none";}
+          updateFontMenu(poemLang);paymentMessage("உங்கள் முந்தைய Payment மற்றும் கவிதைகள் மீட்கப்பட்டன.");
+        }else{await generateAndShow(false);}
+      }else paymentMessage("முந்தைய Order இன்னும் Payment உறுதிப்படுத்தப்படவில்லை. பணம் செலுத்தியிருந்தால் உதவியைத் தொடர்புகொள்ளவும்.");
+    }catch(e){paymentMessage("முன்னைய Order நிலையை இப்போது பெற முடியவில்லை. மீண்டும் Payment செய்ய வேண்டாம்; சிறிது நேரம் கழித்து refresh செய்யவும்.");}
+  })();
+
   (function(){
     var box=document.createElement("div");box.className="leaves";document.body.appendChild(box);
     var cols=["#b79cf0","#d8a6e8","#f0a6c8","#9f86e0"];
