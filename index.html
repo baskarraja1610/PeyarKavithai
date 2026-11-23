@@ -277,15 +277,38 @@ input[type=range]{width:100%;accent-color:var(--gold)}
   }
   async function requestPoems(action){
     if(!currentOrder)throw new Error("உங்கள் Payment Order கிடைக்கவில்லை. பக்கத்தை refresh செய்து மீண்டும் முயற்சிக்கவும்.");
-    var response=await fetch("/.netlify/functions/generate",{
+
+    var start=await fetch("/.netlify/functions/generate-background",{
       method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({order_id:currentOrder.order_id,access_token:currentOrder.access_token,action:action})
     });
-    var raw=await response.text(),data;
-    try{data=JSON.parse(raw)}catch(e){throw new Error("சேவையகத்திலிருந்து சரியான பதில் வரவில்லை.");}
-    if(!response.ok)throw new Error(data.error||"கவிதை உருவாக்க முடியவில்லை.");
-    if(!Array.isArray(data.poems)||data.poems.length!==3)throw new Error("மூன்று கவிதைகளும் முழுமையாக வரவில்லை. மீண்டும் முயற்சிக்கவும்.");
-    return data;
+    if(start.status!==202 && !start.ok){
+      var startText=await start.text(),startData={};
+      try{startData=JSON.parse(startText)}catch(e){}
+      throw new Error(startData.error||"கவிதை உருவாக்கத்தைத் தொடங்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.");
+    }
+
+    var deadline=Date.now()+5*60*1000;
+    while(Date.now()<deadline){
+      await new Promise(function(resolve){setTimeout(resolve,1800)});
+      var response=await fetch("/.netlify/functions/generate",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({order_id:currentOrder.order_id,access_token:currentOrder.access_token,action:"status"})
+      });
+      var raw=await response.text(),data;
+      try{data=JSON.parse(raw)}catch(e){throw new Error("Order நிலையைப் பெற முடியவில்லை. மீண்டும் முயற்சிக்கவும்.");}
+      if(!response.ok)throw new Error(data.error||"Order நிலையைப் பெற முடியவில்லை.");
+      if((data.status==="paid"||data.status==="delivered")&&Array.isArray(data.poems)&&data.poems.length===3){
+        return {poems:data.poems,regen_used:!!data.regen_used};
+      }
+      if(data.generation_state==="failed"){
+        throw new Error("கவிதை உருவாக்கத்தில் தற்காலிக சிக்கல். மீண்டும் முயற்சிக்கலாம்; Payment மீண்டும் தேவையில்லை.");
+      }
+      if(data.status!=="paid"&&data.status!=="delivered"){
+        throw new Error("Payment இன்னும் உறுதிப்படுத்தப்படவில்லை. மீண்டும் Payment செய்ய வேண்டாம்.");
+      }
+    }
+    throw new Error("கவிதை இன்னும் உருவாகிக்கொண்டிருக்கிறது. இந்தப் பக்கத்தைத் திறந்தே வைத்திருந்து மீண்டும் முயற்சிக்கவும்; Payment மீண்டும் தேவையில்லை.");
   }
 
   function build(line,o,i,lang){

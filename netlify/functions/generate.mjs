@@ -106,7 +106,7 @@ export default async (request) => {
           }
         }
       }
-      return json({ success: true, status: record.status, poems: record.poems || null, regen_used: !!record.regen_used, name: record.name, language: record.language, relationship: record.relationship });
+      return json({ success: true, status: record.status, poems: record.poems || null, regen_used: !!record.regen_used, generation_state: record.generation_state || "idle", last_generation_error: record.last_generation_error || null, name: record.name, language: record.language, relationship: record.relationship });
     }
     if (record.status !== "paid" && record.status !== "delivered") return json({ error: "முதலில் Payment உறுதிப்படுத்தப்பட வேண்டும்." }, 402);
 

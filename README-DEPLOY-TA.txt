@@ -6,12 +6,14 @@
 3. netlify/functions/verify-payment.mjs  (புதிய கோப்பு)
 4. netlify/functions/generate.mjs
 5. netlify/functions/razorpay-webhook.mjs
-6. package.json
+6. netlify/functions/generate-background.mjs (புதிய Background Function)
+7. package.json
 
 GitHub-ல் செய்ய வேண்டியது:
 - பழைய index.html-ஐ இந்த index.html-ஆல் முழுமையாக மாற்றவும்.
 - netlify/functions/create-order.mjs-ஐ மாற்றவும்.
 - netlify/functions/generate.mjs-ஐ மாற்றவும்.
+- netlify/functions/generate-background.mjs என்ற புதிய கோப்பைச் சேர்க்கவும்.
 - netlify/functions/razorpay-webhook.mjs-ஐ மாற்றவும்.
 - netlify/functions/verify-payment.mjs என்ற புதிய கோப்பை உருவாக்கி அதன் உள்ளடக்கத்தைச் சேர்க்கவும்.
 - package.json-ஐ இதில் உள்ளபடி மாற்றவும்.
@@ -37,5 +39,5 @@ Webhook events:
 - இந்த code-ல் Order/Poem பதிவுகள் Netlify Blobs-இல் peyarkavithai-orders என்ற store-ல் ap-southeast-1 region-ல் சேமிக்கப்படும்.
 - Webhook event பதிவுகள் razorpay-webhook-inbox store-ல் அதே region-ல் சேமிக்கப்படும்.
 - Payment உறுதி Razorpay signature + Razorpay payment status மூலம் சரிபார்க்கப்படுகிறது. UTR எண் மட்டும் வைத்து payment success என்று கருதப்படாது.
-- AI கவிதை உருவாக்கம் ஒரு request-ல் மூன்று கவிதைகளைப் பெறும். Payment செய்த Order-ஐ sessionStorage-ல் மீட்டெடுக்க உதவும் தகவல் வைத்திருக்கும்.
-- Deploy ஆன பிறகு முதலில் குறைந்த தொகை live test செய்யாமல், Razorpay test mode பயன்படுத்தி அல்லது கட்டுப்படுத்தப்பட்ட live test செய்து Payment, webhook, poem generation, refresh recovery ஆகியவற்றைச் சரிபார்க்க வேண்டும். Live account-ல் உண்மையான ₹14.30 charge ஏற்படும் என்பதை நினைவில் கொள்ளவும்.
+- AI கவிதை உருவாக்கம் Netlify Background Function-ல் நடைபெறும்; இணையப் பக்கம் Order நிலையைப் polling செய்து கவிதை சேமிக்கப்பட்டதும் காட்டும். Payment செய்த Order-ஐ sessionStorage-ல் மீட்டெடுக்க உதவும் தகவல் வைத்திருக்கும்.
+- இந்த மாற்றம் பழைய sync generate அழைப்பை background job + polling முறையாக மாற்றுகிறது. Deploy ஆன பிறகு முதலில் குறைந்த தொகை live test செய்யாமல், Razorpay test mode பயன்படுத்தி அல்லது கட்டுப்படுத்தப்பட்ட live test செய்து Payment, webhook, poem generation, refresh recovery ஆகியவற்றைச் சரிபார்க்க வேண்டும். Live account-ல் உண்மையான ₹14.30 charge ஏற்படும் என்பதை நினைவில் கொள்ளவும்.
